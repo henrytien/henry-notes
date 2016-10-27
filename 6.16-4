@@ -1,0 +1,35 @@
+/*
+      A
+     ABA
+    ABCBA
+   ABCDCBA
+  ABCDEDCBA
+ ABCDEFEDCBA
+
+*/
+
+#include<stdio.h>
+int main(void)
+{
+	char ch='A';
+	int col=0,row=0,space;
+	char alp;
+	
+	printf("Please input a capital alphbet:");
+	scanf("%c",&alp);
+	int num= alp-'A'+1;
+	
+		for(row=0;row<num;row++)
+		{
+			for(space=num;space>row;space--)
+			printf(" ");
+		
+			for(col=0;col<=row;col++)
+				printf("%c",'A'+col);
+			for(col=row-1;col>=0;col--)
+				printf("%c",'A'+col);
+				printf("\n");
+		}
+		return 0;
+}
+
