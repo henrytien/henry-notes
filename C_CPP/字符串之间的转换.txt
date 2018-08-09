@@ -1,0 +1,45 @@
+char*，const char*和string 三者转换
+
+1. const char* 和string 转换
+
+(1) const char*转换为 string，直接赋值即可。
+
+     EX: const char* tmp = "tsinghua".
+
+            string s = tmp;
+
+(2) string转换为const char*，利用c_str()
+
+    EX:  string s = "tsinghua";
+
+           const char*tmp = s.c_str();
+
+2. char*和const char*之间的转换
+
+(1) const char*转化为char*，利用const_cast<char*>
+
+     EX: const char* tmp = "tsinghua";
+
+             char* p = const_cast<char*>(tmp);
+
+(2) char*转化为const char*，直接赋值即可。
+
+     char* p = "tsinghua".
+
+     const char* tmp = p;
+
+3. char*和string之间的转换
+
+  有了1和2的基础，char*和string转化就很简单了。
+
+(1)char*转化为string，直接赋值即可。
+
+     EX: char* p = "tsinghua".
+
+            string str = p;
+
+(2)string转化为char*，走两步，先是string->const char*，然后是const char*->char*
+
+     EX:  string str = "tsinghua";
+
+             char* p = const_cast<char*>(str.c_str()):
