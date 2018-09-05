@@ -143,6 +143,96 @@ static async Task ProcessTaskAsync()
 `await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);`  
 在调用的线程里执行，如果await之后，在线程池里继续执行
 
+- 避免上下文延续
+```csharp
+
+// 避免使用上下文
+async Task ResumeOnContextAsync()
+{
+    await Task.Delay(TimeSpan.FromSeconds(1));
+    // 这个方法在同一个上下文中恢复运行
+}
+
+async Task ResumeWithoutContextAsync()
+{
+    await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+    // 这个方法在恢复运行时，将丢弃上下文
+}
+
+// 捕捉异常
+static async Task ThrowExceptionAsync()
+{
+    await Task.Delay(TimeSpan.FromSeconds(1));
+    throw new InvalidOperationException("Test");
+}
+
+static async Task TestAsync()
+{
+    Task task = ThrowExceptionAsync();
+    try
+    {
+        // await 对象再次await将会抛出异常
+        await task;
+    }
+    catch (InvalidOperationException e)
+    {
+        //捕获异常
+        throw;
+    }
+}
+```
+
+## 第3章 并行开发的基础
+
+- 并行计算
+```csharp
+static void ProcessArray(double[] array)
+{
+    Parallel.Invoke(
+        () => ProcessPartialArray(array, 0, array.Length / 2),
+        () => ProcessPartialArray(array, array.Length / 2,array.Length),
+        );
+}
+
+static void ProcessPartialArray(double [] array, int begin, int end)
+{
+    // 计算
+}
+
+
+// TPL
+void Traverse(Node current)
+{
+    // 
+    if(current.left != null)
+    {
+        Task.Factory.StartNew(() => Traverse(current.left),
+            CancellationToken.None,
+            TaskCreationOptions.AttachedToParent,
+            TaskScheduler.Default
+            );
+    }
+    if (current.right != null)
+    {
+        Task.Factory.StartNew(() => Traverse(current.right),
+            CancellationToken.None,
+            TaskCreationOptions.AttachedToParent,
+            TaskScheduler.Default
+            );
+    }
+}
+
+public void ProcessTree(Node root)
+{
+    var task = Task.Factory.StartNew(() => Traverse(root),
+        CancellationToken.None,
+        TaskCreationOptions.None,
+        TaskScheduler.Default);
+    task.Wait();
+}
+```
+## 第四章 数据流基础
+
 
 ## 参考
 [Async/Await - Best Practices in Asynchronous Programming](https://msdn.microsoft.com/en-us/magazine/jj991977.aspx)  
