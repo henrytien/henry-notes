@@ -182,7 +182,7 @@ static async Task TestAsync()
 }
 ```
 
-## 第3章 并行开发的基础
+## 第三章 并行开发的基础
 
 - 并行计算
 ```csharp
@@ -233,6 +233,38 @@ public void ProcessTree(Node root)
 ```
 ## 第四章 数据流基础
 
+
+
+## 第五章 RX基础
+reactive extensions (Rx) 把事件看作是依次到达的数据序列。
+ -  用限流或抽样抑制事件流  
+ `Throttle` 和 `sample `
+ ## 第六章 测试技巧
+
+## 第七章 互操作
+
+```csharp
+// 互操作
+// 在适当的时机完成任务
+public static Task<string> DownloadStringTaskAsync(WebClient webClient, Uri address)
+{
+    var tcs = new TaskCompletionSource<string>();
+
+    // 这个事件处理程序会完成Task对象,并执行销毁
+    DownloadStringCompletedEventHandler handle = null;
+    handle = (_, e) =>
+        {
+            webClient.DownloadStringCompleted -= handle;
+            tcs.TrySetResult(e.Result);
+        };
+
+    // 登记事件
+    webClient.DownloadStringCompleted += handle;
+    webClient.DownloadStringAsync(address);
+
+    return tcs.Task;
+}
+```
 
 ## 参考
 [Async/Await - Best Practices in Asynchronous Programming](https://msdn.microsoft.com/en-us/magazine/jj991977.aspx)  
