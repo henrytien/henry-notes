@@ -246,7 +246,7 @@ reactive extensions (Rx) 把事件看作是依次到达的数据序列。
 ```csharp
 // 互操作
 // 在适当的时机完成任务
-public static Task<string> DownloadStringTaskAsync(WebClient webClient, Uri address)
+public static Task<string> DownloadStringTaskAsync(this WebClient webClient, Uri address)
 {
     var tcs = new TaskCompletionSource<string>();
 
@@ -265,6 +265,32 @@ public static Task<string> DownloadStringTaskAsync(WebClient webClient, Uri addr
     return tcs.Task;
 }
 ```
+
+
+## 第八章 集合
+
+```csharp
+//集合 
+// 不可变栈
+public static void  ImmStack()
+{
+    var stack = ImmutableStack<int>.Empty;
+    stack = stack.Push(13);
+    //stack = stack.Push(7);
+    var beggerStack = stack.Push(7);
+
+    // 先显示7 然后13
+    foreach (var item in beggerStack)
+        Trace.WriteLine(item);
+
+    // 只显示13
+    foreach (var item in stack)
+        Trace.WriteLine(item);
+}
+```
+两个栈共享的13的栈空间，很方便的创建当前的快照。好处是共享内存。可以用不可变集合做共享状态。
+
+- 线程安全字典
 
 ## 参考
 [Async/Await - Best Practices in Asynchronous Programming](https://msdn.microsoft.com/en-us/magazine/jj991977.aspx)  
