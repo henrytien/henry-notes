@@ -292,6 +292,51 @@ public static void  ImmStack()
 
 - 线程安全字典
 
+- 阻塞队列
+```csharp
+//阻塞
+private static readonly BlockingCollection<int> blockingCollection = new BlockingCollection<int>();
+
+public void addItemBlocking()
+{
+    blockingCollection.Add(7);
+    blockingCollection.Add(13);
+    blockingCollection.CompleteAdding();  //不再添加了
+
+  
+}
+
+public void printItem()
+{
+      foreach (var item in blockingCollection.GetConsumingEnumerable())
+        Trace.WriteLine(item);
+}
+```
+
+如果生产者速度过快？会发生什么了，限流！
+```csharp
+private static readonly BlockingCollection<int> blockingCollection = new BlockingCollection<int>(boundedCapacity:1);
+```
+阻塞栈类似
+
+- 异步队列
+```csharp
+public static async Task  AsyncBuffer()
+{
+    BufferBlock<int> bufferBlock = new BufferBlock<int>();
+    await bufferBlock.SendAsync(7);
+    await bufferBlock.SendAsync(11);
+    bufferBlock.Complete(); // 结束
+    while(await bufferBlock.OutputAvailableAsync())
+    {
+        Console.WriteLine(await bufferBlock.ReceiveAsync());
+    }
+}
+```
+
+## 第9章 取消
+
+
 ## 参考
 [Async/Await - Best Practices in Asynchronous Programming](https://msdn.microsoft.com/en-us/magazine/jj991977.aspx)  
 
