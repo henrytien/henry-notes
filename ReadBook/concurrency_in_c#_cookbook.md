@@ -336,6 +336,93 @@ public static async Task  AsyncBuffer()
 
 ## 第9章 取消
 
+`CancellationTokenSource`来源于 `CancellationTockenSource`类。
+
+简单示例：
+
+
+## 第10章 函数式OOP
+- 异步接口和继承
+    ```csharp
+    interface IMyAsyncInterface
+        {
+            Task<int> CountBytesAsync(string url);
+        }
+        class MyAsyncClass:IMyAsyncInterface
+        {
+            public async Task<int> CountBytesAsync(string url)
+            {
+                var client = new HttpClient();
+                var bytes = await client.GetByteArrayAsync(url);
+                return bytes.Length;
+            }
+        }
+        static async Task UseMyInterfaceAsync(IMyAsyncInterface service)
+        {
+            var result = await service.CountBytesAsync("https://google.com");
+            Trace.WriteLine(result);
+        }
+    ```
+- 异步构造  
+    ```csharp
+       private MyAsyncClass()
+        {
+
+        }
+
+        private async Task<MyAsyncClass> InitializeAsync()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            return this;
+        }
+
+        public static Task<MyAsyncClass> CreateAsync()
+        {
+            var result = new MyAsyncClass();
+            return result.InitializeAsync();
+        }
+    ```
+
+- 异步构造：异步初始化模式   
+一个类的构造函数需要执行异步过程，不使用异步工厂模式，因为这个类的实列是通过反射(如依赖注入/控制反转容器、数据绑定、Activator CreateInstance等)创建的。
+
+- 异步事件  
+
+    命令事件和通知事件 
+   
+
+## 第11章 同步  
+同步的类型主要有两种：通信和数据保护。   
+满足以下三个条件 
+- 同步保护数据共享：  
+    - 多段代码正在并发运行
+    - 这段代码正在访问和读或写同一个数据
+    - 至少有一段代码正在修改(写)数据
+
+- 阻塞锁   
+    多个线程需要安全地读写共享数据
+    ```csharp
+     class MyClass
+    {
+        // 这个锁会保护 _value
+        private readonly object _mutex = new object();
+        private int _value;
+        public void Increment()
+        {
+            lock(_mutex)
+            {
+                _value = _value + 1;
+            }
+        }
+    }
+    ```
+    关于锁的使用
+    - 限制锁的作用范围
+    - 文档中写清锁保护的内容
+    - 锁范围内的代码尽量少
+    - 在控制锁的时候，绝不运行随意的代码  
+
+    
 
 ## 参考
 [Async/Await - Best Practices in Asynchronous Programming](https://msdn.microsoft.com/en-us/magazine/jj991977.aspx)  
