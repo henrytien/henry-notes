@@ -21,3 +21,6 @@ Who changes it?
 
 - Look for hidden state machines
 - Look for common operations
+
+## tools
+[StarUML逆向工程: 通过代码生成类图](https://blog.csdn.net/qq_20480611/article/details/51287038) 
