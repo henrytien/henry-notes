@@ -19,6 +19,10 @@ Beginning in version 2.0 of the .NET Framework, it is not necessary to create a 
 ## ThreadStateException
 
 
+## [Mutex](https://docs.microsoft.com/en-us/dotnet/api/system.threading.mutex?view=netframework-4.7.2)
+
+
+## [Vilatile](https://docs.microsoft.com/en-us/dotnet/api/system.threading.volatile?view=netframework-4.7.2)
 
 
 ## Funny Question
