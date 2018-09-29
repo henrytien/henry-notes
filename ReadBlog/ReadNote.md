@@ -25,3 +25,13 @@ Who changes it?
 ## tools
 [StarUML逆向工程: 通过代码生成类图](https://blog.csdn.net/qq_20480611/article/details/51287038)  
 [《UML与StarUML使用 》分享](https://www.jianshu.com/p/abe2df1b96cf)
+
+
+## game dev
+[向量几何在游戏编程中的使用1](https://blog.csdn.net/popy007/article/details/376934?reload)
+
+[深入探索透视投影变换](https://blog.csdn.net/popy007/article/details/1797121)
+
+
+## books
+[3D游戏引擎设计:实时计算机图形学的应用方法(第2版)]
