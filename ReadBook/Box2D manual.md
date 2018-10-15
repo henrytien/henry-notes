@@ -109,3 +109,28 @@ b2Fixture* myFixture = myBody->CreateFixture(&fixtureDef);
 
 ## Chapter 8 Joints
 
+### 8.3 关节工厂
+```csharp
+b2RevoluteJointDef jointDef;
+jointDef.bodyA = myBodyA;
+jointDef.bodyB = myBodyB;
+jointDef.anchorPoint = myBodyA->GetCenterPosition();
+b2RevoluteJoint* joint = (b2RevoluteJoint*)myWorld->CreateJoint(&jointDef);
+... do stuff ...
+myWorld->DestroyJoint(joint);
+joint = NULL;
+```
+要使关节弹性，可以调节一下定义中的两个常数：频率(frequency)和阻尼率(damping ratio)。将频率想象成谐振子(harmonic oscillator，比如吉他弦)振动的快慢。频率使用单位赫兹(Hertz)来指定。典型情况下，关节频率要小于时间步(time step)频率的一半。比如每秒执行60次时间步， 距离关节的频率就要小于30赫兹。这样做的理由可以参考Nyquist频率理论。
+阻尼率无单位，典型是在0到1之间，也可以更大。1是阻尼率的临界值，当阻尼率为1时，没有振动。
+
+
+### 8.8 滑轮关节
+length1 + length2 == constant
+
+length1 + ratio * length2 == constant
+
+## Chapter 9 接触
+
+
+## Chapter 10 世界类
+
