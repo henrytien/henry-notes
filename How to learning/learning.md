@@ -7,5 +7,19 @@
 
 通过**例子来理清问题和答案的关系来重塑大脑的连接**
 
+
+## 学习英语
+
+英语输入=>英语输出,中间不要经过中文转换。  
+**跳过意识**
+- 泛听，泛读
+- 看电影学英语
+
+## 为什么会觉得编程、解题毫无头绪
+多学知识，分而治之
+
+![学习观](https://github.com/henrytien/HenryNote/blob/master/How%20to%20learning/images/%E5%AD%A6%E4%B9%A0%E8%A7%82.PNG?raw=true)
+
+![机器学习](https://github.com/henrytien/HenryNote/blob/master/How%20to%20learning/images/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.PNG?raw=true)
 # 参考
 [学习观](https://zhuanlan.zhihu.com/p/46853733)
