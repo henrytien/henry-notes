@@ -123,9 +123,10 @@ Cold Turkey Writer: https://getcoldturkey.com/writer/
     1. When your friend solves a problem that you couldn’t solve, you’ll listen to their answer and say “I kind of get it.” Not good enough.﻿
 
 ## How to Take Notes in Class: The 5 Best Methods - College Info Geek
-the Cornell Method
-flow notes
-mind-map
+The Outline  
+For Review:The Cornell Method  
+Holistic: Flow Notes  
+mind-map  
 
 ## How to Take Faster Notes - College Info Geek 
 simple words
@@ -133,8 +134,8 @@ simple words
 ## Should You Take Notes on Paper or on a Computer? - College Info Geek
 
 ## How to Make Studying Fun (or at Least Less Boring)
-1-Build an interest link
-2-The Growth Mindset - Based on Mindset by Carol Dweck
-3- Studying with a partner - Warning: avoid collective procrastination
-4- Change your environment - Study playlists, ritual 
-5- Create mini rewards - High density fun (hanging out with  friends or playing a videogame)
+1-Build an interest link  
+2-The Growth Mindset - Based on Mindset by Carol Dweck  
+3- Studying with a partner - Warning: avoid collective procrastination  
+4- Change your environment - Study playlists, ritual   
+5- Create mini rewards - High density fun (hanging out with  friends or playing a videogame)  
