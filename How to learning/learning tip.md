@@ -139,3 +139,11 @@ simple words
 3- Studying with a partner - Warning: avoid collective procrastination  
 4- Change your environment - Study playlists, ritual   
 5- Create mini rewards - High density fun (hanging out with  friends or playing a videogame)  
+## 如何简单高效规划时间？| 时间管理方法 | 有效掌握时间规划
+1. 打印时间表格 （可以网上下载或者从iCalendar/Google Calendar打印）
+2. 填写固定定死的日期安排
+3. 填写生存所需的安排（吃饭洗澡采购等）
+4. 填写学习时间安排和想培养的习惯
+（剩下的时间还可以填写自己的娱乐啦）
+
+## Taking Notes: Crash Course Study Skills #1
