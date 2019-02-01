@@ -35,3 +35,21 @@ HOW I GOT INTO STANFORD | Stats and Extracurriculars + Advice!
 8. Steal the Show by Michael Port
 9. The Missing Manual by J.D. Roth
 10. You decide﻿
+
+How to Read a Book for Maximum Learning
+
+
+## 6 Books That Completely Changed My Life
+1. "The Motivation Hacker" by Nick Winter
+2. "The 7 Habits of Highly Effective People" by Steven Covey
+3. "The 4-Hour Work Week" by Tim Ferriss
+4. "The Happiness Equation" by Neil Pasricha
+5. "Pragmatic Thinking and Learning" by Andy Hunt
+6. "Thinking Fast and Slow" by Daniel Kahneman﻿
+
+## How to Create a Morning Routine (and Stick to It Long-Term)
+
+Gotta earn those lamborghinis﻿
+
+How to Be as Productive as Elon Musk - 5 Essential Practices
+
