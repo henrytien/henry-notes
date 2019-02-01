@@ -12,3 +12,26 @@ How i made 5digit Income at the age of 19 ! | The story of my youtube channel | 
 Michelle Deng 新加坡作家
 
 第二天重新做第一天不会做的题目 
+
+
+How I Balance Everything at Harvard
+
+## 2019年2月1日  
+This is what an astrophysics exam looks like at MIT
+
+How to Get Better at Math
+
+HOW I GOT INTO STANFORD | Stats and Extracurriculars + Advice!
+
+10 Books EVERY Student Should Read - 2017 Book Recommendations
+1. Deep Work by Cal Newport
+2. a Mind for Numbers by Barbara Oakley 
+3. Getting from Collage to Career by Lindsey Pollak 
+4. The Power of Habit by Charles Duhigg
+5. Spark by John Ratey
+5.5. Anime club
+6. Productivity Project by Chris Bailey 
+7. The Happiness Equation by Neil Pasricha
+8. Steal the Show by Michael Port
+9. The Missing Manual by J.D. Roth
+10. You decide﻿
