@@ -53,3 +53,17 @@ Gotta earn those lamborghinis﻿
 
 How to Be as Productive as Elon Musk - 5 Essential Practices
 
+2019年2月2日
+## Was Reading a Book a Week for a Year Worth It?
+
+## Waking up at 5AM is changing my life
+
+
+## A Day in the Life of a Minimalist
+good breakfast
+
+
+## Study With Me || 15 HOUR STUDY DAY (study motivation)
+
+
+## Study With Me: After School Study Routine
