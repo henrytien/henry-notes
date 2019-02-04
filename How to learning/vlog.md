@@ -67,3 +67,57 @@ good breakfast
 
 
 ## Study With Me: After School Study Routine
+
+
+## How To Read a Book a Week | Jim Kwik
+The average book is about 64,000 words a day.
+The average person reads about 200 words per minute.
+On average, it takes 320 minutes to get through a book. 
+320 minutes divided by 7 (days in a week) equals only 45 minutes of reading a day.
+
+## How I Read A Book A Day | Weekly Wisdom Episode 2 by Jay Shetty
+## Machine Learning Books for Beginners
+An Introduction to Statistical Learning
+Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani 
+
+Pattern Recognition and Machine Learning
+Christopher Bishop
+
+Artificial Intelligence - A Modern Approach
+Stuart Russell and Peter Norvig
+
+Machine Learning - An Algorithmic Perspective
+Stephen Marsland
+
+Deep Learning
+Ian Goodfellow, Joshua Bendigo, and Aaron Courville
+
+
+## How To Read More || How I Read 102 Books in a Year!
+1. Read in the morning and evening
+2. Read when you're traveling 
+3. Read while you're waiting around
+4. Basically just read more by just reading as often as possible 
+5. Set a page goal to reach by the end of the day but read more anyway.
+6. Enjoy what you are reading and alternate between books that interest you to those that don't.
+
+## Learn How To Speed Read - Best Speed Reading Techniques
+1. Read the first and last sentence of each paragraph and zoom through the rest.
+
+2. Read the table of contents and back of the book. This will tell you what the author wants you to look for and it will improve your reading speed.
+
+3. Do not say the words as you read. This slows you down and is called sub-vocalization.
+
+4. One of the biggest points for speed reading and learning how to speed read is to use your finger whenever you read and force your eye to follow your finger. This will keep your eye from bouncing around the page because this does slow you down.
+
+5. Listen to classical music when you read. This has been shown to improve your reading speed. Maybe this is because it relaxes your brain or keeps it focused. Regardless it is a good speed reading tip.
+
+## Best Version Of Yourself - Motivational Video
+
+## One more reason to get a good night’s sleep | Jeff Iliff
+
+
+## how to fall asleep instantly
+
+## How to Fall Asleep in 2 Minutes According to the US Navy
+
