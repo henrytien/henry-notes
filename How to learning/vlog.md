@@ -121,3 +121,31 @@ Ian Goodfellow, Joshua Bendigo, and Aaron Courville
 
 ## How to Fall Asleep in 2 Minutes According to the US Navy
 
+2019年2月5日12:03:45 
+## Deep Work: How to Develop the Most Valuable Skill of the 21st Century (PART 1)
+
+
+## How to Write a Book: 13 Steps From a Bestselling Author
+1. Establish your writing space.
+2. Assemble your writing tools.
+3. Break the project into small pieces.
+4. Settle on your big idea.
+5. Construct your outline.
+6. Set a firm writing schedule. (Firm Deadline).
+7. Conduct your research.
+8. Write a compelling, reader-first, opener.
+9. Fill your story with conflict and tension.
+10. Turn off your internal editor. (While writing).
+11. Don't quit during the Marathon of the Middle.
+12. Write a resounding ending.
+13. Become a ferocious (aggressive) self-editor.﻿
+
+How to change and improve your handwriting
+
+How to hold your PEN properly for better handwriting
+
+How to Write Fast With Good Handwriting
+
+Calligraphy and The Left-Handed Scribe
+
+Handwriting Fundamentals - What Does It Mean to Write With Your Arm?
