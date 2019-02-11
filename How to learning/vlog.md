@@ -1,3 +1,29 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2019年2月11日  
+ZERO TO ONE by Peter Thiel | Core Message
+
+How I take notes on my iPad Pro in medical school - Cambridge University medical student
+
+CALENDAR BLOCKING // Time Management for Students
+
+Sleepy Time no4 ***For Relaxation/Sleep***
+
+
+
+
 Waking up at 2.4am | My new habit | A morning in Tsinghua University
 
 雷军故事 -书籍
@@ -157,4 +183,6 @@ The future we're building -- and boring | Elon Musk
 Whole-Arm Movement Technique
 
 Handwriting for adults
+
+
 
