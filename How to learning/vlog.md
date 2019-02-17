@@ -1,15 +1,32 @@
 
+依图创始人朱珑清华演讲：让机器睁眼
+
+start up = 极其不确定性 + 告诉增长
+
+误会 先验假设 的不符
+deep learning
+10年
+一半同意和一半支持
+
+定好目标 10倍
+
+将机器与人对比起来发展
+
+让生活的管理越来越科学 
+
+在中国，有世界级命题  命题高手
+
+the devil is in the details.
 
 
 
 
+risk
+
+Development and Deployment of Multiplayer Online Games (from social games to MMOFPS
 
 
-
-
-
-
-
+（CCTV－10纪录片《走近科学》第八集《新型大脑》）
 
 
 2019年2月11日  
