@@ -1,3 +1,16 @@
+2019年2月21日
+## 8 Things I Did RIGHT as a Student
+1. Taking jobs outside of my major area
+2. I got serious about using my calendar
+3. I optimized my schedule for extracurriculars
+4. I kept applying for scholarships
+5. I made efforts to meet my professors
+6. I chose to live on campus during my first two years (Do whatever you can to put yourself in the middle of action.)
+7. I was always on the lookout for opportunities (Put them on your calendar)
+8. I went to every career fair
+Extra 9. Read 10 Steps to earning awesome grades﻿
+
+
 
 依图创始人朱珑清华演讲：让机器睁眼
 
