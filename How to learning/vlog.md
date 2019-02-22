@@ -1,3 +1,11 @@
+2019年2月22日  
+Understanding Kafka
+
+How we teach computers to understand pictures | Fei Fei Li
+
+How AI can save our humanity | Kai-Fu Lee
+
+
 2019年2月21日
 ## 8 Things I Did RIGHT as a Student
 1. Taking jobs outside of my major area
