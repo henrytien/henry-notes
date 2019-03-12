@@ -30,3 +30,7 @@
 ## Unity相关
 
 - 登录选择Login 
+
+-- ubuntu
+
+`sudo apt-get update`
