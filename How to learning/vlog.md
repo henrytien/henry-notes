@@ -1,3 +1,12 @@
+2019年3月13日
+Speed Up Mac and iOS Typing with Text Expansion
+aText Typing Accelerator
+
+How to Stop Being Constantly Overwhelmed
+1. Reset sprint (reorganize your life )
+2. Re establish your routine (if it was a complex routine start small and slowly incorporate more) 
+3. Define priorities and learn to say no﻿
+
 2019年3月6日  
 Git MERGE vs REBASE
 
