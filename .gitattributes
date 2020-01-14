@@ -1,3 +1,2 @@
-*.cpp linguist-detectable=true
-*.html linguist-detectable=false
-*.xml linguist-detectable=false
+* linguist-vendored
+*.cpp linguist-vendored=false
