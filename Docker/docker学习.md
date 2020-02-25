@@ -51,6 +51,31 @@ docker 使用容器来运行
 - Docker inspect 命令  
 `docker inspect centos`
 
+- 查看完整镜像ID  
+`docker images --no-trunc`
+
+- 删除镜像  
+`docker rmi 7df` 
+
+- 创建镜像   
+`docker commit -a "henry centos" -m "golang" centos henry/centos`
+
+- 启动创建的镜像  
+`docker run -d --name henrycentos -p 80 henry/centos nginx -g "daemon off;"`
+
+- dockerfile 创建镜像  
+    ```shell
+    #First Dockerfile
+    FROM ubuntu:14.04
+    MAINTAINER henry "henrytien.hotmail.com"
+    RUN apt-get update
+    RUN apt-get install -y nginx
+    EXPOSE 80
+    ```
+    `docker build -t='henry/df_test' .`  
+    启动  
+    `docker run -d --name web -p 80 henry/df_test nginx -g "daemon off;"`
+
 - 查看日志  
 `docker logs -tf --tail 10 redis-test`
 - 查看进程  
@@ -84,3 +109,6 @@ docker 使用容器来运行
 
 #### 安装成功
 ![](./images/docker_redis.png)
+
+### docker 安装 MySQL
+`docker run -itd --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql`
