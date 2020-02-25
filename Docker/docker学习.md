@@ -31,6 +31,18 @@ docker 使用容器来运行
 - docker 启动CentOS  
 `docker run -t -i centos  /bin/bash`
 
+- 存出和载入镜像  
+`docker save `
+- 载入镜像  
+`docker load`
+## 容器
+- 导出和导入容器  
+`docker export 7691a814370e > ubuntu.tar`
+- 导入容器  
+`docker import  `
+
+## 仓库  
+
 ## Docker 命令
 - 查看版本  
 `docker --version`
