@@ -226,7 +226,7 @@ OK
 - 压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者整数值。
 - 添加新节点到压缩列表， 或者从压缩列表中删除节点， 可能会引发连锁更新操作， 但这种操作出现的几率并不高
 
-## Redis Object
+## Redis object implementation 
 
 Some kind of objects like Strings and Hashes can be  internally represented in multiple ways. The 'encoding' field of the object is set to one of this fields for this object. 
 
@@ -433,4 +433,135 @@ robj *setTypeCreate(sds value) {
     return createSetObject();
 }
 ```
+
+### Zset 
+
+压缩列表内的集合元素按分值从小到大进行排序， 分值较小的元素被放置在靠近表头的方向， 而分值较大的元素则被放置在靠近表尾的方向。
+
+```shell
+127.0.0.1:6379> ZADD price 8.5 apple 5.0 banana 6.0 cherry
+(integer) 0
+(322.46s)
+127.0.0.1:6379> OBJECT encoding price
+"ziplist"
+```
+
+```c
+# Similarly to hashes and lists, sorted sets are also specially encoded in
+
+# order to save a lot of space. This encoding is only used when the length and
+
+# elements of a sorted set are below the following limits:
+
+zset-max-ziplist-entries 128
+
+zset-max-ziplist-value 64
+```
+
+[zaddGenericCommand](https://github.com/henrytien/redis/blob/unstable/src/t_zset.c#L1534)
+
+```c
+/* This generic command implements both ZADD and ZINCRBY. */
+void zaddGenericCommand(client *c, int flags) {
+//...
+if (server.zset_max_ziplist_entries == 0 ||
+            server.zset_max_ziplist_value < sdslen(c->argv[scoreidx+1]->ptr))
+        {
+            zobj = createZsetObject();
+        } else {
+            zobj = createZsetZiplistObject();
+        }
+ //...
+}
+```
+
+| 命令      | `ziplist` 编码的实现方法                                     | `zset` 编码的实现方法                                        |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ZADD      | 调用 `ziplistInsert` 函数， 将成员和分值作为两个节点分别插入到压缩列表。 | 先调用 `zslInsert` 函数， 将新元素添加到跳跃表， 然后调用 `dictAdd` 函数， 将新元素关联到字典。 |
+| ZCARD     | 调用 `ziplistLen` 函数， 获得压缩列表包含节点的数量， 将这个数量除以 `2` 得出集合元素的数量。 | 访问跳跃表数据结构的 `length` 属性， 直接返回集合元素的数量。 |
+| ZCOUNT    | 遍历压缩列表， 统计分值在给定范围内的节点的数量。            | 遍历跳跃表， 统计分值在给定范围内的节点的数量。              |
+| ZRANGE    | 从表头向表尾遍历压缩列表， 返回给定索引范围内的所有元素。    | 从表头向表尾遍历跳跃表， 返回给定索引范围内的所有元素。      |
+| ZREVRANGE | 从表尾向表头遍历压缩列表， 返回给定索引范围内的所有元素。    | 从表尾向表头遍历跳跃表， 返回给定索引范围内的所有元素。      |
+| ZRANK     | 从表头向表尾遍历压缩列表， 查找给定的成员， 沿途记录经过节点的数量， 当找到给定成员之后， 途经节点的数量就是该成员所对应元素的排名。 | 从表头向表尾遍历跳跃表， 查找给定的成员， 沿途记录经过节点的数量， 当找到给定成员之后， 途经节点的数量就是该成员所对应元素的排名。 |
+| ZREVRANK  | 从表尾向表头遍历压缩列表， 查找给定的成员， 沿途记录经过节点的数量， 当找到给定成员之后， 途经节点的数量就是该成员所对应元素的排名。 | 从表尾向表头遍历跳跃表， 查找给定的成员， 沿途记录经过节点的数量， 当找到给定成员之后， 途经节点的数量就是该成员所对应元素的排名。 |
+| ZREM      | 遍历压缩列表， 删除所有包含给定成员的节点， 以及被删除成员节点旁边的分值节点。 | 遍历跳跃表， 删除所有包含了给定成员的跳跃表节点。 并在字典中解除被删除元素的成员和分值的关联。 |
+| ZSCORE    | 遍历压缩列表， 查找包含了给定成员的节点， 然后取出成员节点旁边的分值节点保存的元素分值。 | 直接从字典中取出给定成员的分值。                             |
+
+```shell
+127.0.0.1:6379> OBJECT encoding number
+"ziplist"
+127.0.0.1:6379> zadd number 520 mj
+(integer) 1
+127.0.0.1:6379> OBJECT encoding number
+"skiplist"
+```
+
+### Free memory
+
+ Set a special refcount in the object to make it "shared":
+
+ \* incrRefCount and decrRefCount() will test for this special refcount
+
+ \* and will not touch the object. This way it is free to access shared
+
+ \* objects such as small integers from different threads without any
+
+ \* mutex.
+
+| 函数            | 作用                                                         |
+| --------------- | ------------------------------------------------------------ |
+| `incrRefCount`  | 将对象的引用计数值增一。                                     |
+| `decrRefCount`  | 将对象的引用计数值减一， 当对象的引用计数值等于 `0` 时， 释放对象。 |
+| `resetRefCount` | 将对象的引用计数值设置为 `0` ， 但并不释放对象， 这个函数通常在需要重新设置对象的引用计数值时使用。 |
+
+### Shared object
+
+在 Redis 中， 让多个键共享同一个值对象需要执行以下两个步骤：
+
+1. 将数据库键的值指针指向一个现有的值对象；
+2. 将被共享的值对象的引用计数增一。
+
+```shell
+127.0.0.1:6379> set henrymj 100
+OK
+(7.39s)
+127.0.0.1:6379> OBJECT refcount henrymj
+(integer) 2147483647
+127.0.0.1:6379> set mjhenry 100
+OK
+127.0.0.1:6379> OBJECT refcount mjhenry
+(integer) 2147483647
+```
+
+[Redis encoding of objects and the size impact](https://stackoverflow.com/questions/49408862/redis-encoding-of-objects-and-the-size-impact)
+
+### Object idletime
+
+OBJECT IDLETIME 命令的实现是特殊的， 这个命令在访问键的值对象时， 不会修改值对象的 `lru` 属性。
+
+除了可以被 OBJECT IDLETIME 命令打印出来之外， 键的空转时长还有另外一项作用： 如果服务器打开了 `maxmemory` 选项， 并且服务器用于回收内存的算法为 `volatile-lru` 或者 `allkeys-lru` ， 那么当服务器占用的内存数超过了 `maxmemory` 选项所设置的上限值时， 空转时长较高的那部分键会优先被服务器释放， 从而回收内存。
+
+```
+127.0.0.1:6379> SET msg "hello world"
+OK
+127.0.0.1:6379> OBJECT idlefttime
+(error) ERR Unknown subcommand or wrong number of arguments for 'idlefttime'. Try OBJECT HELP.
+127.0.0.1:6379> OBJECT idletime msg
+(integer) 59
+127.0.0.1:6379> OBJECT idletime msg
+(integer) 82
+127.0.0.1:6379> get msg
+"hello world"
+127.0.0.1:6379> OBJECT idletime msg
+(integer) 17
+127.0.0.1:6379>
+```
+
+### Summary 
+
+- Redis 数据库中的每个键值对的键和值都是一个对象。
+- Redis 共有字符串、列表、哈希、集合、有序集合五种类型的对象， 每种类型的对象至少都有两种或以上的编码方式， 不同的编码可以在不同的使用场景上优化对象的使用效率。
+- 服务器在执行某些命令之前， 会先检查给定键的类型能否执行指定的命令， 而检查一个键的类型就是检查键的值对象的类型。
+- Redis 的对象系统带有引用计数实现的内存回收机制， 当一个对象不再被使用时， 该对象所占用的内存就会被自动释放。
+- 对象会记录自己的最后一次被访问的时间， 这个时间可以用于计算对象的空转时间。
 
