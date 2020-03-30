@@ -228,6 +228,22 @@ OK
 
 ## Redis Object
 
+Some kind of objects like Strings and Hashes can be  internally represented in multiple ways. The 'encoding' field of the object is set to one of this fields for this object. 
+
+```c
+#define OBJ_ENCODING_RAW 0     /* Raw representation */
+#define OBJ_ENCODING_INT 1     /* Encoded as integer */
+#define OBJ_ENCODING_HT 2      /* Encoded as hash table */
+#define OBJ_ENCODING_ZIPMAP 3  /* Encoded as zipmap */
+#define OBJ_ENCODING_LINKEDLIST 4 /* No longer used: old list encoding. */
+#define OBJ_ENCODING_ZIPLIST 5 /* Encoded as ziplist */
+#define OBJ_ENCODING_INTSET 6  /* Encoded as intset */
+#define OBJ_ENCODING_SKIPLIST 7  /* Encoded as skiplist */
+#define OBJ_ENCODING_EMBSTR 8  /* Embedded sds string encoding */
+#define OBJ_ENCODING_QUICKLIST 9 /* Encoded as linked list of ziplists */
+#define OBJ_ENCODING_STREAM 10 /* Encoded as a radix tree of listpacks */
+```
+
 Redis 可以在执行命令之前， 根据对象的类型来判断一个对象是否可以执行给定的命令。 使用对象的另一个好处是， 我们可以针对不同的使用场景， 为对象设置多种不同的数据结构实现， 从而优化对象在不同场景下的使用效率。
 
 除此之外， Redis 的对象系统还实现了基于引用计数技术的内存回收机制： 当程序不再使用某个对象的时候， 这个对象所占用的内存就会被自动释放； 另外， Redis 还通过引用计数技术实现了对象共享机制， 这一机制可以在适当的条件下， 通过让多个数据库键共享同一个对象来节约内存。
@@ -289,5 +305,132 @@ The current limit of 44 is chosen so that the biggest string object
 
 
 
+| 命令        | `int` 编码的实现方法                                         | `embstr` 编码的实现方法                                      | `raw` 编码的实现方法                                         |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| SET         | 使用 `int` 编码保存值。                                      | 使用 `embstr` 编码保存值。                                   | 使用 `raw` 编码保存值。                                      |
+| GET         | 拷贝对象所保存的整数值， 将这个拷贝转换成字符串值， 然后向客户端返回这个字符串值。 | 直接向客户端返回字符串值。                                   | 直接向客户端返回字符串值。                                   |
+| APPEND      | 将对象转换成 `raw` 编码， 然后按`raw` 编码的方式执行此操作。 | 将对象转换成 `raw` 编码， 然后按`raw` 编码的方式执行此操作。 | 调用 `sdscatlen` 函数， 将给定字符串追加到现有字符串的末尾。 |
+| INCRBYFLOAT | 取出整数值并将其转换成 `longdouble` 类型的浮点数， 对这个浮点数进行加法计算， 然后将得出的浮点数结果保存起来。 | 取出字符串值并尝试将其转换成`long double` 类型的浮点数， 对这个浮点数进行加法计算， 然后将得出的浮点数结果保存起来。 如果字符串值不能被转换成浮点数， 那么向客户端返回一个错误。 | 取出字符串值并尝试将其转换成 `longdouble` 类型的浮点数， 对这个浮点数进行加法计算， 然后将得出的浮点数结果保存起来。 如果字符串值不能被转换成浮点数， 那么向客户端返回一个错误。 |
+| INCRBY      | 对整数值进行加法计算， 得出的计算结果会作为整数被保存起来。  | `embstr` 编码不能执行此命令， 向客户端返回一个错误。         | `raw` 编码不能执行此命令， 向客户端返回一个错误。            |
+| DECRBY      | 对整数值进行减法计算， 得出的计算结果会作为整数被保存起来。  | `embstr` 编码不能执行此命令， 向客户端返回一个错误。         | `raw` 编码不能执行此命令， 向客户端返回一个错误。            |
+| STRLEN      | 拷贝对象所保存的整数值， 将这个拷贝转换成字符串值， 计算并返回这个字符串值的长度。 | 调用 `sdslen` 函数， 返回字符串的长度。                      | 调用 `sdslen` 函数， 返回字符串的长度。                      |
+| SETRANGE    | 将对象转换成 `raw` 编码， 然后按`raw` 编码的方式执行此命令。 | 将对象转换成 `raw` 编码， 然后按`raw` 编码的方式执行此命令。 | 将字符串特定索引上的值设置为给定的字符。                     |
+| GETRANGE    | 拷贝对象所保存的整数值， 将这个拷贝转换成字符串值， 然后取出并返回字符串指定索引上的字符。 | 直接取出并返回字符串指定索引上的字符。                       | 直接取出并返回字符串指定索引上的字符。                       |
 
+### Redis list
+
+```c
+typedef struct quicklistNode {
+    struct quicklistNode *prev;
+    struct quicklistNode *next;
+    unsigned char *zl;
+    unsigned int sz;             /* ziplist size in bytes */
+    unsigned int count : 16;     /* count of items in ziplist */
+    unsigned int encoding : 2;   /* RAW==1 or LZF==2 */
+    unsigned int container : 2;  /* NONE==1 or ZIPLIST==2 */
+    unsigned int recompress : 1; /* was this node previous compressed? */
+    unsigned int attempted_compress : 1; /* node can't compress; too small */
+    unsigned int extra : 10; /* more bits to steal for future usage */
+} quicklistNode;
+```
+
+Quicklist is a 40 byte struct (on 64-bit systems) describing a quicklist. Node, quicklist, and Iterator are the only data structures used currently.
+
+```shell
+127.0.0.1:6379> rpush mjlist "I love you, I love you, I love you, I love you..."
+(integer) 1
+127.0.0.1:6379> OBJECT encoding mjlist
+"quicklist"
+127.0.0.1:6379> rpush mjlist1 "I love you"
+(integer) 1
+127.0.0.1:6379> OBJECT encoding mjlist1
+"quicklist"
+127.0.0.1:6379> rpush mjlist1 "loveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+(integer) 2
+127.0.0.1:6379> OBJECT encoding mjlist1
+"quicklist"
+```
+
+Add new entry to tail node of quicklist.
+
+[quicklistPushTail](https://github.com/henrytien/redis/blob/unstable/src/quicklist.c#L511)
+
+```c
+int quicklistPushTail(quicklist *quicklist, void *value, size_t sz) {
+    quicklistNode *orig_tail = quicklist->tail;
+    if (likely(
+            _quicklistNodeAllowInsert(quicklist->tail, quicklist->fill, sz))) {
+        quicklist->tail->zl =
+            ziplistPush(quicklist->tail->zl, value, sz, ZIPLIST_TAIL);
+        quicklistNodeUpdateSz(quicklist->tail);
+    } else {
+        quicklistNode *node = quicklistCreateNode();
+        node->zl = ziplistPush(ziplistNew(), value, sz, ZIPLIST_TAIL);
+
+        quicklistNodeUpdateSz(node);
+        _quicklistInsertNodeAfter(quicklist, quicklist->tail, node);
+    }
+    quicklist->count++;
+    quicklist->tail->count++;
+    return (orig_tail != quicklist->tail);
+}
+```
+
+### Hash 
+
+hashTypeConvert
+
+```c
+void hashTypeConvert(robj *o, int enc) {
+    if (o->encoding == OBJ_ENCODING_ZIPLIST) {
+        hashTypeConvertZiplist(o, enc);
+    } else if (o->encoding == OBJ_ENCODING_HT) {
+        serverPanic("Not implemented");
+    } else {
+        serverPanic("Unknown hash encoding");
+    }
+}
+```
+
+```shell
+127.0.0.1:6379> EVAL "for i=1, 512 do redis.call('HSET', KEYS[1], i, i) end" 1 "numbers"
+(nil)
+(237.99s)
+127.0.0.1:6379> OBJECT encoding numbers
+"ziplist"
+```
+
+### Set 
+
+```shell
+127.0.0.1:6379> SADD mj:numbers 520
+(integer) 1
+127.0.0.1:6379> OBJECT encoding mj:numbers
+"intset"
+127.0.0.1:6379>
+127.0.0.1:6379> SADD mj:fruits "apple" "banana"
+(integer) 2
+127.0.0.1:6379> OBJECT encoding mj:fruits
+"hashtable"
+127.0.0.1:6379> SADD mj:math 100
+(integer) 1
+127.0.0.1:6379> OBJECT encoding mj:math
+"intset"
+127.0.0.1:6379> SADD mj:math math "A"
+(integer) 2
+127.0.0.1:6379> OBJECT encoding mj:math
+"hashtable"
+```
+
+Factory method to return a set that *can* hold "value". When the object has
+
+an integer-encodable value, an intset will be returned. Otherwise a regular hash table. 
+
+```c
+robj *setTypeCreate(sds value) {
+    if (isSdsRepresentableAsLongLong(value,NULL) == C_OK)
+        return createIntsetObject();
+    return createSetObject();
+}
+```
 
