@@ -565,3 +565,115 @@ OK
 - Redis 的对象系统带有引用计数实现的内存回收机制， 当一个对象不再被使用时， 该对象所占用的内存就会被自动释放。
 - 对象会记录自己的最后一次被访问的时间， 这个时间可以用于计算对象的空转时间。
 
+## Redis db implementation
+
+### Db 
+
+```c
+typedef struct redisDb {
+    dict *dict;                 /* The keyspace for this DB */
+    dict *expires;              /* Timeout of keys with a timeout set */
+    dict *blocking_keys;        /* Keys with clients waiting for data (BLPOP)*/
+    dict *ready_keys;           /* Blocked keys that received a PUSH */
+    dict *watched_keys;         /* WATCHED keys for MULTI/EXEC CAS */
+    int id;                     /* Database ID */
+    long long avg_ttl;          /* Average TTL, just for stats */
+    unsigned long expires_cursor; /* Cursor of the active expire cycle. */
+    list *defrag_later;         /* List of key names to attempt to defrag one by one, gradually. */
+} redisDb;
+```
+
+在读取一个键之后（读操作和写操作都要对键进行读取）， 服务器会根据键是否存在， 以此来更新服务器的键空间命中（hit）次数或键空间不命中（miss）次数， 这两个值可以在 INFO stats 命令的 `keyspace_hits` 属性和 `keyspace_misses` 属性中查看。
+
+### Redis RDB file type
+
+As you can guess from the names these files implement the RDB and AOF persistence for Redis. Redis uses a persistence model based on the `fork()`system call in order to create a thread with the same (shared) memory content of the main Redis thread. This secondary thread dumps the content of the memory on disk. This is used by `rdb.c` to create the snapshots on disk and by `aof.c` in order to perform the AOF rewrite when the append only file gets too big.
+
+Map object types to RDB object types.
+
+```c
+#define RDB_TYPE_STRING 0
+#define RDB_TYPE_LIST   1
+#define RDB_TYPE_SET    2
+#define RDB_TYPE_ZSET   3
+#define RDB_TYPE_HASH   4
+#define RDB_TYPE_ZSET_2 5 /* ZSET version 2 with doubles stored in binary. */
+#define RDB_TYPE_MODULE 6
+#define RDB_TYPE_MODULE_2 7 /* Module value with annotations for parsing without
+                                the generating module being loaded. */
+```
+
+
+
+#### Summary 
+
+- RDB 文件用于保存和还原 Redis 服务器所有数据库中的所有键值对数据。
+- SAVE 命令由服务器进程直接执行保存操作，所以该命令会阻塞服务器。
+- BGSAVE 命令由子进程执行保存操作，所以该命令不会阻塞服务器。
+- 服务器状态中会保存所有用 `save` 选项设置的保存条件，当任意一个保存条件被满足时，服务器会自动执行 BGSAVE 命令。
+- RDB 文件是一个经过压缩的二进制文件，由多个部分组成。
+- 对于不同类型的键值对， RDB 文件会使用不同的方式来保存它们。
+
+### Redis AOF
+
+#### APPEND ONLY MODE
+
+By default Redis asynchronously dumps the dataset on disk. This mode is good enough in many applications, but an issue with the Redis process or a power outage may result into a few minutes of writes lost (depending on the configured save points).
+
+The Append Only File is an alternative persistence mode that provides  much better durability. For instance using the default data fsync policy (see later in the config file) Redis can lose just one second of writes in a dramatic event like a server power outage, or a single write if something wrong with the Redis process itself happens, but the operating system is still running correctly.
+
+[Redis Persistence](https://redis.io/topics/persistence) This page provides a technical description of Redis persistence, it is a suggested read for all Redis users.
+
+[Redis persistence demystified](http://antirez.com/post/redis-persistence-demystified.html) 
+
+Redis supports three different modes: 
+
+- no: don't fsync, just let the OS flush the data when it wants. Faster.
+- always: fsync after every write to the append only log. Slow, Safest.
+- everysec: fsync only one time every second. Compromise.
+
+#### Summary
+
+- AOF 文件通过保存所有修改数据库的写命令请求来记录服务器的数据库状态。
+- AOF 文件中的所有命令都以 Redis 命令请求协议的格式保存。
+- 命令请求会先保存到 AOF 缓冲区里面， 之后再定期写入并同步到 AOF 文件。
+- `appendfsync` 选项的不同值对 AOF 持久化功能的安全性、以及 Redis 服务器的性能有很大的影响。
+- 服务器只要载入并重新执行保存在 AOF 文件中的命令， 就可以还原数据库本来的状态。
+- AOF 重写可以产生一个新的 AOF 文件， 这个新的 AOF 文件和原有的 AOF 文件所保存的数据库状态一样， 但体积更小。
+- AOF 重写是一个有歧义的名字， 该功能是通过读取数据库中的键值对来实现的， 程序无须对现有 AOF 文件进行任何读入、分析或者写入操作。
+- 在执行 BGREWRITEAOF 命令时， Redis 服务器会维护一个 AOF 重写缓冲区， 该缓冲区会在子进程创建新 AOF 文件的期间， 记录服务器执行的所有写命令。 当子进程完成创建新 AOF 文件的工作之后， 服务器会将重写缓冲区中的所有内容追加到新 AOF 文件的末尾， 使得新旧两个 AOF 文件所保存的数据库状态一致。 最后， 服务器用新的 AOF 文件替换旧的 AOF 文件， 以此来完成 AOF 文件重写操作。
+
+## Redis event
+
+#### Event type
+
+I/O 多路复用程序可以监听多个套接字的 `ae.h/AE_READABLE` 事件和 `ae.h/AE_WRITABLE` 事件， 这两类事件和套接字操作之间的对应关系如下：
+
+- 当套接字变得可读时（客户端对套接字执行 `write` 操作，或者执行 `close` 操作）， 或者有新的可应答（acceptable）套接字出现时（客户端对服务器的监听套接字执行 `connect` 操作）， 套接字产生 `AE_READABLE` 事件。
+- 当套接字变得可写时（客户端对套接字执行 `read` 操作）， 套接字产生 `AE_WRITABLE` 事件。
+
+#### Accept handler
+
+`networking.c/acceptTcpHandler` Create an event handler for accepting new connections in TCP and Unix domain sockets.
+
+#### Command handler
+
+`readQueryFromClient()` is the **readable event handler** and accumulates data from read from the client into the query buffer.  `nread = connRead(c->conn, c->querybuf+qblen, readlen);` 
+
+#### Reply handler
+
+Write event handler. Just send data to the client.
+
+`networking.c/sendReplyToClient`
+
+#### Summary 
+
+- Redis 服务器是一个事件驱动程序， 服务器处理的事件分为时间事件和文件事件两类。
+- 文件事件处理器是基于 Reactor 模式实现的网络通讯程序。
+- 文件事件是对套接字操作的抽象： 每次套接字变得可应答（acceptable）、可写（writable）或者可读（readable）时， 相应的文件事件就会产生。
+- 文件事件分为 `AE_READABLE` 事件（读事件）和 `AE_WRITABLE` 事件（写事件）两类。
+- 时间事件分为定时事件和周期性事件： 定时事件只在指定的时间达到一次， 而周期性事件则每隔一段时间到达一次。
+- 服务器在一般情况下只执行 `serverCron` 函数一个时间事件， 并且这个事件是周期性事件。
+- 文件事件和时间事件之间是合作关系， 服务器会轮流处理这两种事件， 并且处理事件的过程中也不会进行抢占。
+- 时间事件的实际处理时间通常会比设定的到达时间晚一些。
+
