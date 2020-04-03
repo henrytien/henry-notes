@@ -1,4 +1,4 @@
-## 简单动态字符串	
+### 简单动态字符串	
 
 ![](./img/cstring_vs_sds.png)
 
@@ -565,9 +565,9 @@ OK
 - Redis 的对象系统带有引用计数实现的内存回收机制， 当一个对象不再被使用时， 该对象所占用的内存就会被自动释放。
 - 对象会记录自己的最后一次被访问的时间， 这个时间可以用于计算对象的空转时间。
 
-## Redis db implementation
+# Redis db implementation
 
-### Db 
+## Db 
 
 ```c
 typedef struct redisDb {
@@ -605,7 +605,7 @@ Map object types to RDB object types.
 
 
 
-#### Summary 
+### Summary 
 
 - RDB 文件用于保存和还原 Redis 服务器所有数据库中的所有键值对数据。
 - SAVE 命令由服务器进程直接执行保存操作，所以该命令会阻塞服务器。
@@ -614,9 +614,9 @@ Map object types to RDB object types.
 - RDB 文件是一个经过压缩的二进制文件，由多个部分组成。
 - 对于不同类型的键值对， RDB 文件会使用不同的方式来保存它们。
 
-### Redis AOF
+## Redis AOF
 
-#### APPEND ONLY MODE
+### APPEND ONLY MODE
 
 By default Redis asynchronously dumps the dataset on disk. This mode is good enough in many applications, but an issue with the Redis process or a power outage may result into a few minutes of writes lost (depending on the configured save points).
 
@@ -632,7 +632,7 @@ Redis supports three different modes:
 - always: fsync after every write to the append only log. Slow, Safest.
 - everysec: fsync only one time every second. Compromise.
 
-#### Summary
+### Summary
 
 - AOF 文件通过保存所有修改数据库的写命令请求来记录服务器的数据库状态。
 - AOF 文件中的所有命令都以 Redis 命令请求协议的格式保存。
@@ -645,28 +645,28 @@ Redis supports three different modes:
 
 ## Redis event
 
-#### Event type
+### Event type
 
 I/O 多路复用程序可以监听多个套接字的 `ae.h/AE_READABLE` 事件和 `ae.h/AE_WRITABLE` 事件， 这两类事件和套接字操作之间的对应关系如下：
 
 - 当套接字变得可读时（客户端对套接字执行 `write` 操作，或者执行 `close` 操作）， 或者有新的可应答（acceptable）套接字出现时（客户端对服务器的监听套接字执行 `connect` 操作）， 套接字产生 `AE_READABLE` 事件。
 - 当套接字变得可写时（客户端对套接字执行 `read` 操作）， 套接字产生 `AE_WRITABLE` 事件。
 
-#### Accept handler
+### Accept handler
 
 `networking.c/acceptTcpHandler` Create an event handler for accepting new connections in TCP and Unix domain sockets.
 
-#### Command handler
+### Command handler
 
 `readQueryFromClient()` is the **readable event handler** and accumulates data from read from the client into the query buffer.  `nread = connRead(c->conn, c->querybuf+qblen, readlen);` 
 
-#### Reply handler
+### Reply handler
 
 Write event handler. Just send data to the client.
 
 `networking.c/sendReplyToClient`
 
-#### Summary 
+### Summary 
 
 - Redis 服务器是一个事件驱动程序， 服务器处理的事件分为时间事件和文件事件两类。
 - 文件事件处理器是基于 Reactor 模式实现的网络通讯程序。
@@ -676,4 +676,211 @@ Write event handler. Just send data to the client.
 - 服务器在一般情况下只执行 `serverCron` 函数一个时间事件， 并且这个事件是周期性事件。
 - 文件事件和时间事件之间是合作关系， 服务器会轮流处理这两种事件， 并且处理事件的过程中也不会进行抢占。
 - 时间事件的实际处理时间通常会比设定的到达时间晚一些。
+
+## Clients 
+
+Another important Redis data structure is the one defining a client.
+
+In the past it was called `redisClient`, now just `client`. The structure
+
+has many fields, here we'll just show the main ones: [client](https://github.com/henrytien/redis/blob/unstable/src/server.h#L760)
+
+```c
+struct client {
+
+​        int fd;
+
+​        sds querybuf;
+
+​        int argc;
+
+​        robj **argv;
+
+​        redisDb *db;
+
+​        int flags;
+
+​        list *reply;
+
+​        char buf[PROTO_REPLY_CHUNK_BYTES];
+
+​        ... many other fields ...
+
+​    }
+```
+
+The client structure defines a **connected client**:
+
+The `fd` field is the client socket file descriptor.
+
+ `argc` and `argv` are populated with the command the client is executing, so that functions implementing a given Redis command can read the arguments.
+
+ `querybuf` accumulates the requests from the client, which are parsed by the Redis server according to the Redis protocol and executed by calling the implementations of the commands the client is executing.
+
+ `reply` and `buf` are dynamic and static buffers that accumulate the replies the server sends to the client. These buffers are incrementally written to the socket as soon as the file descriptor is writable.
+
+- fakeclient 
+
+  Redis commands are always executed in the context of a client, so in order to load the append only file we need to create a fake client.
+
+  `fakeClient = createAOFClient();`
+
+- client 
+
+  Create the client and dispatch the command.
+
+```c
+127.0.0.1:6379> CLIENT list
+id=4 addr=127.0.0.1:58526 fd=8 name= age=36712 idle=0 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=26 qbuf-free=32742 obl=0 oll=0 omem=0 events=r cmd=client user=default
+```
+
+以下展示的是客户端执行 CLIENT_SETNAME 命令之后的客户端列表：
+
+```c
+redis> CLIENT list
+
+addr=127.0.0.1:53428 fd=6 name=message_queue age=2093 idle=0 ...
+addr=127.0.0.1:53469 fd=7 name=user_relationship age=855 idle=2 ...
+```
+
+
+
+`buf` 是一个大小为 `REDIS_REPLY_CHUNK_BYTES` 字节的字节数组， 而 `bufpos` 属性则记录了 `buf` 数组目前已使用的字节数量。
+
+`REDIS_REPLY_CHUNK_BYTES` 常量目前的默认值为 `16*1024` ， 也即是说， `buf` 数组的默认大小为 16 KB 。
+
+当 `buf` 数组的空间已经用完， 或者回复因为太大而没办法放进 `buf` 数组里面时， 服务器就会开始使用可变大小缓冲区。
+
+可变大小缓冲区由 `reply` 链表和一个或多个字符串对象组成：
+
+### Summary
+
+- 服务器状态结构使用 `clients` 链表连接起多个客户端状态， 新添加的客户端状态会被放到链表的末尾。
+- 客户端状态的 `flags` 属性使用不同标志来表示客户端的角色， 以及客户端当前所处的状态。
+- 输入缓冲区记录了客户端发送的命令请求， 这个缓冲区的大小不能超过 1 GB 。
+- 命令的参数和参数个数会被记录在客户端状态的 `argv` 和 `argc` 属性里面， 而 `cmd` 属性则记录了客户端要执行命令的实现函数。
+- 客户端有固定大小缓冲区和可变大小缓冲区两种缓冲区可用， 其中固定大小缓冲区的最大大小为 16 KB ， 而可变大小缓冲区的最大大小不能超过服务器设置的硬性限制值。
+- 输出缓冲区限制值有两种， 如果输出缓冲区的大小超过了服务器设置的硬性限制， 那么客户端会被立即关闭； 除此之外， 如果客户端在一定时间内， 一直超过服务器设置的软性限制， 那么客户端也会被关闭。
+- 当一个客户端通过网络连接连上服务器时， 服务器会为这个客户端创建相应的客户端状态。 网络连接关闭、 发送了不合协议格式的命令请求、 成为 CLIENT_KILL 命令的目标、 空转时间超时、 输出缓冲区的大小超出限制， 以上这些原因都会造成客户端被关闭。
+- 处理 Lua 脚本的伪客户端在服务器初始化时创建， 这个客户端会一直存在， 直到服务器关闭。
+- 载入 AOF 文件时使用的伪客户端在载入工作开始时动态创建， 载入工作完毕之后关闭。
+
+## Server 
+
+### Command table
+
+```c
+/* Our command table.
+ *
+ * Every entry is composed of the following fields:
+ *
+ * name:        A string representing the command name.
+ *
+ * function:    Pointer to the C function implementing the command.
+ *
+ * arity:       Number of arguments, it is possible to use -N to say >= N
+ *
+ * sflags:      Command flags as string. See below for a table of flags.
+ *
+ * flags:       Flags as bitmask. Computed by Redis using the 'sflags' field.
+ *
+ * get_keys_proc: An optional function to get key arguments from a command.
+ *                This is only used when the following three fields are not
+ *                enough to specify what arguments are keys.
+ *
+ * first_key_index: First argument that is a key
+ *
+ * last_key_index: Last argument that is a key
+ *
+ * key_step:    Step to get all the keys from first to last argument.
+ *              For instance in MSET the step is two since arguments
+ *              are key,val,key,val,...
+ *
+ * microseconds: Microseconds of total execution time for this command.
+ *
+ * calls:       Total number of calls of this command.
+ *
+ * id:          Command bit identifier for ACLs or other goals.
+ *
+ * The flags, microseconds and calls fields are computed by Redis and should
+ * always be set to zero.
+```
+
+###  Call the command
+
+```c
+/* Call the command. */
+    dirty = server.dirty;
+    updateCachedTime(0);
+    start = server.ustime;
+    c->cmd->proc(c);
+    duration = ustime()-start;
+    dirty = server.dirty-dirty;
+    if (dirty < 0) dirty = 0;
+```
+
+### Summary 
+
+- 一个命令请求从发送到完成主要包括以下步骤： 1. 客户端将命令请求发送给服务器； 2. 服务器读取命令请求，并分析出命令参数； 3. 命令执行器根据参数查找命令的实现函数，然后执行实现函数并得出命令回复； 4. 服务器将命令回复返回给客户端。
+- `serverCron` 函数默认每隔 `100` 毫秒执行一次， 它的工作主要包括更新服务器状态信息， 处理服务器接收的 `SIGTERM` 信号， 管理客户端资源和数据库状态， 检查并执行持久化操作， 等等。
+- 服务器从启动到能够处理客户端的命令请求需要执行以下步骤： 1. 初始化服务器状态； 2. 载入服务器配置； 3. 初始化服务器数据结构； 4. 还原数据库状态； 5. 执行事件循环。
+
+# 多机数据库的实现
+
+## 复制
+
+### 同步
+
+当客户端向从服务器发送 SLAVEOF 命令， 要求从服务器复制主服务器时， 从服务器首先需要执行同步操作， 也即是， 将从服务器的数据库状态更新至主服务器当前所处的数据库状态。
+
+从服务器对主服务器的同步操作需要通过向主服务器发送 SYNC 命令来完成， 以下是 SYNC 命令的执行步骤：
+
+1. 从服务器向主服务器发送 SYNC 命令。
+2. 收到 SYNC 命令的主服务器执行 BGSAVE 命令， 在后台生成一个 RDB 文件， 并使用一个缓冲区记录从现在开始执行的所有写命令。
+3. 当主服务器的 BGSAVE 命令执行完毕时， 主服务器会将 BGSAVE 命令生成的 RDB 文件发送给从服务器， 从服务器接收并载入这个 RDB 文件， 将自己的数据库状态更新至主服务器执行 BGSAVE 命令时的数据库状态。
+4. 主服务器将记录在缓冲区里面的所有写命令发送给从服务器， 从服务器执行这些写命令， 将自己的数据库状态更新至主服务器数据库当前所处的状态。
+
+### Summary
+
+- 在复制操作刚开始的时候， 从服务器会成为主服务器的客户端， 并通过向主服务器发送命令请求来执行复制步骤， 而在复制操作的后期， 主从服务器会互相成为对方的客户端。
+- 主服务器通过向从服务器传播命令来更新从服务器的状态， 保持主从服务器一致， 而从服务器则通过向主服务器发送命令来进行心跳检测， 以及命令丢失检测。
+
+## Sentinel
+
+启动一个 Sentinel 可以使用命令：
+
+```
+$ redis-sentinel /path/to/your/sentinel.conf
+```
+
+或者命令：
+
+```
+$ redis-server /path/to/your/sentinel.conf --sentinel
+```
+
+
+
+```c
+/* Main state. */
+struct sentinelState {
+    char myid[CONFIG_RUN_ID_SIZE+1]; /* This sentinel ID. */
+    uint64_t current_epoch;         /* Current epoch. */
+    dict *masters;      /* Dictionary of master sentinelRedisInstances.
+                           Key is the instance name, value is the
+                           sentinelRedisInstance structure pointer. */
+    int tilt;           /* Are we in TILT mode? */
+    int running_scripts;    /* Number of scripts in execution right now. */
+    mstime_t tilt_start_time;       /* When TITL started. */
+    mstime_t previous_time;         /* Last time we ran the time handler. */
+    list *scripts_queue;            /* Queue of user scripts to execute. */
+    char *announce_ip;  /* IP addr that is gossiped to other sentinels if
+                           not NULL. */
+    int announce_port;  /* Port that is gossiped to other sentinels if
+                           non zero. */
+    unsigned long simfailure_flags; /* Failures simulation. */
+    int deny_scripts_reconfig; /* Allow SENTINEL SET ... to change script
+                                  paths at runtime? */
+} sentinel;
+```
 
