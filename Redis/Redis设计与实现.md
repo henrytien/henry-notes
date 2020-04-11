@@ -1,4 +1,60 @@
-### 简单动态字符串	
+<!-- TOC -->
+
+        - [简单动态字符串](#简单动态字符串)
+    - [链表](#链表)
+    - [字典](#字典)
+        - [Hash table](#hash-table)
+        - [Hash collision](#hash-collision)
+        - [Redis rehash](#redis-rehash)
+        - [渐进式 rehash](#渐进式-rehash)
+        - [Hash function](#hash-function)
+    - [Skiplist](#skiplist)
+        - [zskiplistNode](#zskiplistnode)
+        - [skiplist summary](#skiplist-summary)
+    - [Redis Integer](#redis-integer)
+        - [Redis 整数集合的实现](#redis-整数集合的实现)
+        - [Redis 升级的好处](#redis-升级的好处)
+        - [Summary](#summary)
+    - [Ziplist](#ziplist)
+        - [Summary](#summary-1)
+    - [Redis object implementation](#redis-object-implementation)
+        - [Embstr](#embstr)
+        - [Raw](#raw)
+        - [Redis list](#redis-list)
+        - [Hash](#hash)
+        - [Set](#set)
+        - [Zset](#zset)
+        - [Free memory](#free-memory)
+        - [Shared object](#shared-object)
+        - [Object idletime](#object-idletime)
+        - [Summary](#summary-2)
+- [Redis db implementation](#redis-db-implementation)
+  - [Db](#db)
+    - [Redis RDB file type](#redis-rdb-file-type)
+    - [Summary](#summary-3)
+  - [Redis AOF](#redis-aof)
+    - [APPEND ONLY MODE](#append-only-mode)
+    - [Summary](#summary-4)
+  - [Redis event](#redis-event)
+    - [Event type](#event-type)
+    - [Accept handler](#accept-handler)
+    - [Command handler](#command-handler)
+    - [Reply handler](#reply-handler)
+    - [Summary](#summary-5)
+  - [Clients](#clients)
+    - [Summary](#summary-6)
+  - [Server](#server)
+    - [Command table](#command-table)
+    - [Call the command](#call-the-command)
+    - [Summary](#summary-7)
+- [多机数据库的实现](#%e5%a4%9a%e6%9c%ba%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%ae%9e%e7%8e%b0)
+  - [复制](#%e5%a4%8d%e5%88%b6)
+    - [同步](#%e5%90%8c%e6%ad%a5)
+    - [Summary](#summary-8)
+  - [Sentinel](#sentinel)
+
+<!-- /TOC -->
+### 简单动态字符串    
 
 ![](./img/cstring_vs_sds.png)
 
@@ -38,7 +94,7 @@ Many fuction implement by list.
 
 ## 字典
 
-### Hash table	
+### Hash table    
 
 Dict is an implementation of a non-blocking hash table which rehashes incrementally.
 
@@ -127,11 +183,11 @@ Redis conclude
 
   Alternative to Balanced Trees", modified in three ways:
 
- 	 a) this implementation allows for repeated scores.
+      a) this implementation allows for repeated scores.
 
-​	  b) the comparison is not just by key (our 'score') but by satellite data.
+​      b) the comparison is not just by key (our 'score') but by satellite data.
 
- 	 c) there is a back pointer, so it's a doubly linked list with the back
+      c) there is a back pointer, so it's a doubly linked list with the back
 
    pointers being only at "level 1". This allows to traverse the list
 
