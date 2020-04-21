@@ -28,14 +28,5 @@ Several variables relate to the language components of a toolchain which are ena
 
 If [`cmake(1)`](https://cmake.org/cmake/help/latest/manual/cmake.1.html#manual:cmake(1)) is invoked with the command line parameter `-DCMAKE_TOOLCHAIN_FILE=path/to/file`, the file will be loaded early to set values for the compilers. 
 
-
-
-# David Sankel: Big Projects, and CMake, and Git, Oh My!
-
-cmake-toolchains
-	Introduction
-	Languages
-	Variables and Properties
-	Tools Feature
-	Cross Compiling
+# [cmake-buildsystem(7)](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#id13)
 
