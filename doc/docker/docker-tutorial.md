@@ -1,19 +1,32 @@
 
 <!-- TOC -->
 
-- [镜像](#%e9%95%9c%e5%83%8f)
-- [容器](#%e5%ae%b9%e5%99%a8)
-- [仓库](#%e4%bb%93%e5%ba%93)
-- [Docker 命令](#docker-%e5%91%bd%e4%bb%a4)
-- [Docker 实例](#docker-%e5%ae%9e%e4%be%8b)
-  - [docker 安装 Redis](#docker-%e5%ae%89%e8%a3%85-redis)
-    - [运行](#%e8%bf%90%e8%a1%8c)
-    - [安装成功](#%e5%ae%89%e8%a3%85%e6%88%90%e5%8a%9f)
-  - [docker 安装 MySQL](#docker-%e5%ae%89%e8%a3%85-mysql)
-  - [启动MySQL](#%e5%90%af%e5%8a%a8mysql)
+- [Basic](#basic)
+  - [镜像](#%e9%95%9c%e5%83%8f)
+  - [容器](#%e5%ae%b9%e5%99%a8)
+  - [仓库](#%e4%bb%93%e5%ba%93)
+  - [Docker 命令](#docker-%e5%91%bd%e4%bb%a4)
+  - [Docker 实例](#docker-%e5%ae%9e%e4%be%8b)
+    - [docker 安装 Redis](#docker-%e5%ae%89%e8%a3%85-redis)
+      - [运行](#%e8%bf%90%e8%a1%8c)
+      - [安装成功](#%e5%ae%89%e8%a3%85%e6%88%90%e5%8a%9f)
+    - [docker 安装 MySQL](#docker-%e5%ae%89%e8%a3%85-mysql)
+    - [启动MySQL](#%e5%90%af%e5%8a%a8mysql)
+- [Develop with Docker](#develop-with-docker)
+  - [Build images](#build-images)
+    - [Dockerfile best practice](#dockerfile-best-practice)
+    - [Create ephemeral containers](#create-ephemeral-containers)
+- [Run your application in production](#run-your-application-in-production)
+  - [Orchestration](#orchestration)
+    - [Enable Kubernetes](#enable-kubernetes)
+  - [Configure all objects](#configure-all-objects)
+  - [Manage labels on objects](#manage-labels-on-objects)
+- [Control Docker with systemd](#control-docker-with-systemd)
+    - [HTTP/HTTPS proxy](#httphttps-proxy)
+- [Dockerfile reference](#dockerfile-reference)
 
 <!-- /TOC -->
-
+# Basic
 ![](./images/docker.png)
 
 
@@ -145,7 +158,43 @@ docker 使用容器来运行
 
 `docker exec -it mysql /bin/bash`
 
+# Develop with Docker
 
+## Build images
+
+### Dockerfile best practice
+
+Docker builds images automatically by reading the instructions from a `Dockerfile` -- a text file that contains all commands, in order, needed to build a given image. A `Dockerfile` adheres to a specific format and set of instructions which you can find at [Dockerfile reference](https://docs.docker.com/engine/reference/builder/).
+
+### Create ephemeral containers
+
+
+
+# Run your application in production
+
+## Orchestration
+
+The portability and reproducibility of a containerized process mean we have an opportunity to move and scale our containerized applications across clouds and datacenters. Containers effectively guarantee that those applications run the same way anywhere, allowing us to quickly and easily take advantage of all these environments.
+
+Furthermore, as we scale our applications up, we’ll want some tooling to help automate the maintenance of those applications, able to replace failed containers automatically, and manage the rollout of updates and reconfigurations of those containers during their lifecycle.
+
+Tools to manage, scale, and maintain containerized applications are called *orchestrators*, and the most common examples of these are *Kubernetes* and *Docker Swarm*. Development environment deployments of both of these orchestrators are provided by Docker Desktop, which we’ll use throughout this guide to create our first orchestrated, containerized application.
+
+### Enable Kubernetes
+
+Docker Desktop will set up Kubernetes for you quickly and easily. Follow the setup and validation instructions appropriate for your operating system:
+
+[Enable Kubernetes](https://docs.docker.com/get-started/orchestration/#enable-kubernetes)  
+
+## Configure all objects
+
+## Manage labels on objects
+
+Each type of object with support for labels has mechanisms for adding and managing them and using them as they relate to that type of object. These links provide a good place to start learning about how you can use labels in your Docker deployments.
+
+Labels on images, containers, local daemons, volumes, and networks are static for the lifetime of the object. To change these labels you must recreate the object. Labels on swarm nodes and services can be updated dynamically.
+
+[Manage labels on objects](https://docs.docker.com/config/labels-custom-metadata/#manage-labels-on-objects)
 
 # Control Docker with systemd
 
@@ -160,6 +209,14 @@ This example overrides the default `docker.service` file.
 If you are behind an HTTP or HTTPS proxy server, for example in corporate settings, you need to add this configuration in the Docker systemd service file.
 
 [HTTP/HTTPS proxy](https://docs.docker.com/config/daemon/systemd/#httphttps-proxy) 
+
+
+
+# Dockerfile reference
+
+Docker can build images automatically by reading the instructions from a `Dockerfile`. A `Dockerfile` is a text document that contains all the commands a user could call on the command line to assemble an image. Using `docker build` users can create an automated build that executes several command-line instructions in succession.
+
+This page describes the commands you can use in a `Dockerfile`. When you are done reading this page, refer to the [`Dockerfile` Best Practices](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/) for a tip-oriented guide.
 
 
 
