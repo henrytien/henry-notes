@@ -168,6 +168,12 @@ Docker builds images automatically by reading the instructions from a `Dockerfil
 
 ### Create ephemeral containers
 
+### Build images with BuildKit
+
+Docker Build is one of the most used features of the Docker Engine - users ranging from developers, build teams, and release teams all use Docker Build.
+
+
+
 
 
 # Run your application in production
@@ -210,7 +216,31 @@ If you are behind an HTTP or HTTPS proxy server, for example in corporate settin
 
 [HTTP/HTTPS proxy](https://docs.docker.com/config/daemon/systemd/#httphttps-proxy) 
 
+# Command-line reference
 
+## Docker CLI (docker)
+
+### docker build
+
+Build an image from a Dockerfile
+
+```none
+docker build [OPTIONS] PATH | URL | -
+```
+
+The `docker build` command builds Docker images from a Dockerfile and a “context”. A build’s context is the set of files located in the specified `PATH` or `URL`. The build process can refer to any of the files in the context. For example, your build can use a [*COPY*](https://docs.docker.com/engine/reference/builder/#copy) instruction to reference a file in the context.
+
+The `URL` parameter can refer to three kinds of resources: Git repositories, pre-packaged tarball contexts and plain text files.
+
+- ### Git repositories
+
+Git URLs accept context configuration in their fragment section, separated by a colon `:`. The first part represents the reference that Git will check out, and can be either a branch, a tag, or a remote reference. The second part represents a subdirectory inside the repository that will be used as a build context.
+
+For example, run this command to use a directory called `docker` in the branch `container`:
+
+```
+$ docker build https://github.com/docker/rootfs.git#container:docker
+```
 
 # Dockerfile reference
 
