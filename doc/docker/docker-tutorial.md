@@ -1,4 +1,19 @@
 
+<!-- TOC -->
+
+- [镜像](#%e9%95%9c%e5%83%8f)
+- [容器](#%e5%ae%b9%e5%99%a8)
+- [仓库](#%e4%bb%93%e5%ba%93)
+- [Docker 命令](#docker-%e5%91%bd%e4%bb%a4)
+- [Docker 实例](#docker-%e5%ae%9e%e4%be%8b)
+  - [docker 安装 Redis](#docker-%e5%ae%89%e8%a3%85-redis)
+    - [运行](#%e8%bf%90%e8%a1%8c)
+    - [安装成功](#%e5%ae%89%e8%a3%85%e6%88%90%e5%8a%9f)
+  - [docker 安装 MySQL](#docker-%e5%ae%89%e8%a3%85-mysql)
+  - [启动MySQL](#%e5%90%af%e5%8a%a8mysql)
+
+<!-- /TOC -->
+
 ![](./images/docker.png)
 
 
@@ -129,6 +144,25 @@ docker 使用容器来运行
 ### 启动MySQL
 
 `docker exec -it mysql /bin/bash`
+
+
+
+# Control Docker with systemd
+
+Many Linux distributions use systemd to start the Docker daemon. This document shows a few examples of how to customize Docker’s settings.
+
+### HTTP/HTTPS proxy
+
+The Docker daemon uses the `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environmental variables in its start-up environment to configure HTTP or HTTPS proxy behavior. You cannot configure these environment variables using the `daemon.json` file.
+
+This example overrides the default `docker.service` file.
+
+If you are behind an HTTP or HTTPS proxy server, for example in corporate settings, you need to add this configuration in the Docker systemd service file.
+
+[HTTP/HTTPS proxy](https://docs.docker.com/config/daemon/systemd/#httphttps-proxy) 
+
+
+
 
 
 
