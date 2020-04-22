@@ -194,6 +194,31 @@ endif()
 
 
 
+## Compile Flags
+
+CMake supports setting compile flags in a number of different ways:
+
+- using target_compile_definitions() function
+- using the CMAKE_C_FLAGS and CMAKE_CXX_FLAGS variables.
+
+### Set Per-Target C++ Flags
+
+The recommended way to set C++ flags in modern CMake is to use per-target flags which can be populated to other targets through the target_compile_definitions() [function](https://cmake.org/cmake/help/v3.0/command/target_compile_definitions.html?highlight=target_compile_definitions). This will populate the [INTERFACE_COMPILE_DEFINITIONS](https://cmake.org/cmake/help/v3.0/prop_tgt/INTERFACE_COMPILE_DEFINITIONS.html#prop_tgt:INTERFACE_COMPILE_DEFINITIONS) for the library and push the definition to the linked target depending on the scope.
+
+```
+target_compile_definitions(cmake_examples_compile_flags
+    PRIVATE EX3
+)
+```
+
+This will cause the compiler to add the definition -DEX3 when compiling the target.
+
+In the target was a library, and the scope PUBLIC or INTERFACE has been chosen the definition would also be included in any executables that link this target.
+
+For compiler options you can also use the target_compile_options() [function](https://cmake.org/cmake/help/v3.0/command/target_compile_options.html).
+
+
+
 # sub-projects
 
 # code-generation
