@@ -119,6 +119,81 @@ will exit with an error.
 | CMAKE_CURRENT_BINARY_DIR | The build directory you are currently in.                    |
 | PROJECT_BINARY_DIR       | The build directory for the current project.                 |
 
+
+
+## Installing
+
+CMake offers the ability to add a `make install` target to allow a user to install binaries, libraries and other files. The base install location is controlled by the variable CMAKE_INSTALL_PREFIX which can be set using ccmake or by calling cmake with `cmake .. -DCMAKE_INSTALL_PREFIX=/install/location`
+
+The files that are installed are controlled by the [install()](https://cmake.org/cmake/help/v3.0/command/install.html) function.
+
+```
+install (TARGETS cmake_examples_inst_bin
+    DESTINATION bin)
+```
+
+Install the binary generated from the target cmake_examples_inst_bin target to the destination ${CMAKE_INSTALL_PREFIX}/bin
+
+```
+install (TARGETS cmake_examples_inst
+    LIBRARY DESTINATION lib)
+```
+
+Install the shared library generated from the target cmake_examples_inst target to the destination ${CMAKE_INSTALL_PREFIX}/lib
+
+| Note | This may not work on windows. On platforms that have DLL targets you may need to add the following`install (TARGETS cmake_examples_inst    LIBRARY DESTINATION lib    RUNTIME DESTINATION bin)` |
+| ---- | ------------------------------------------------------------ |
+|      |                                                              |
+
+```
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+    DESTINATION include)
+```
+
+Install the header files for developing against the cmake_examples_inst library into the ${CMAKE_INSTALL_PREFIX}/include directory.
+
+```
+install (FILES cmake-examples.conf
+    DESTINATION etc)
+```
+
+Install a configuration file to the destination ${CMAKE_INSTALL_PREFIX}/etc
+
+After `make install` has been run, CMake generates an install_manifest.txt file which includes details on all installed files.
+
+| Note | If you run the `make install` command as root, the install_manifest.txt file will be owned by root. |
+| ---- | ------------------------------------------------------------ |
+|      |                                                              |
+
+## Build Type
+
+CMake has a number of built in build configurations which can be used to compile your project. These specify the optimization levels and if debug information is to be included in the binary.
+
+The levels provided are:
+
+- Release - Adds the `-O3 -DNDEBUG` flags to the compiler
+- Debug - Adds the `-g` flag
+- MinSizeRel - Adds `-Os -DNDEBUG`
+- RelWithDebInfo - Adds `-O2 -g -DNDEBUG` flags
+
+### Set Default Build Type
+
+The default build type provided by CMake is to include no compiler flags for optimization. For some projects you may want to set a default build type so that you do not have to remember to set it.
+
+To do this you can add the following to your top level CMakeLists.txt
+
+```
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message("Setting build type to 'RelWithDebInfo' as none was specified.")
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+    "MinSizeRel" "RelWithDebInfo")
+endif()
+```
+
+
+
 # sub-projects
 
 # code-generation
