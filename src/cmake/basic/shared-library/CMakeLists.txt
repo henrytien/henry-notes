@@ -7,7 +7,7 @@ project(hello_library)
 ############################################################
 
 #Generate the shared library from the library sources
-add_library(hello_library SHARED 
+add_library(hello_library SHARED	 
     src/Hello.cpp
 )
 add_library(hello::library ALIAS hello_library)
