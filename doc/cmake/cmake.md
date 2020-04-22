@@ -1,5 +1,26 @@
 # [CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html#id1)
 
+<!-- TOC -->
+
+- [CMake Tutorial](#cmake-tutorial)
+- [Cmake](#cmake)
+  - [Introduction](#introduction)
+  - [Languages](#languages)
+  - [Variables and Properties](#variables-and-properties)
+  - [Toolchain Features](#toolchain-features)
+  - [Cross Compiling](#cross-compiling)
+- [basic](#basic)
+- [sub-projects](#sub-projects)
+- [code-generation](#code-generation)
+- [static-analysis](#static-analysis)
+- [unit-testing](#unit-testing)
+- [installer](#installer)
+- [package-management](#package-management)
+- [dockerfiles](#dockerfiles)
+
+<!-- /TOC -->
+# Cmake
+
 Recently, I've created a [simple library](https://github.com/marker68/simple-k-means) in C++. I want to use CMake as the building system so it’s the time to learn a new tool.
 
 ## [Introduction](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id8)
@@ -30,9 +51,73 @@ Several variables relate to the language components of a toolchain which are ena
 
 If [`cmake(1)`](https://cmake.org/cmake/help/latest/manual/cmake.1.html#manual:cmake(1)) is invoked with the command line parameter `-DCMAKE_TOOLCHAIN_FILE=path/to/file`, the file will be loaded early to set values for the compilers. 
 
-# basic
+# Basic
+
+## [hello-cmake](https://github.com/ttroy50/cmake-examples/blob/master/01-basic/A-hello-cmake)
+
+```cmake
+# Set the minimum version of CMake that can be used
+# To find the cmake version run
+# $ cmake --version
+cmake_minimum_required(VERSION 3.5)
+
+# Set the project name
+project (hello_cmake)
+
+# Add an executable
+add_executable(hello_cmake main.cpp)
+```
 
 
+
+Main.cpp
+
+```c++
+#include <iostream>
+
+int main(int argc, char *argv[])
+{
+   std::cout << "Hello CMake!" << std::endl;
+   return 0;
+}
+```
+
+
+
+### Introduction
+
+Shows a very basic hello world example.
+
+The files in this tutorial are below:
+
+```
+A-hello-cmake$ tree
+.
+├── CMakeLists.txt
+├── main.cpp
+```
+
+  * link:CMakeLists.txt[CMakeLists.txt] - Contains the CMake commands you wish to run
+  * link:main.cpp[main.cpp] - A simple "Hello World" cpp file.
+
+### Concepts
+
+### CMakeLists.txt
+
+CMakeLists.txt is the file which should store all your CMake commands. When
+cmake is run in a folder it will look for this file and if it does not exist cmake
+will exit with an error.
+
+
+
+| Variable                 | Info                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| CMAKE_SOURCE_DIR         | The root source directory                                    |
+| CMAKE_CURRENT_SOURCE_DIR | The current source directory if using sub-projects and directories. |
+| PROJECT_SOURCE_DIR       | The source directory of the current cmake project.           |
+| CMAKE_BINARY_DIR         | The root binary / build directory. This is the directory where you ran the cmake command. |
+| CMAKE_CURRENT_BINARY_DIR | The build directory you are currently in.                    |
+| PROJECT_BINARY_DIR       | The build directory for the current project.                 |
 
 # sub-projects
 
