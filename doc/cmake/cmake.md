@@ -340,6 +340,60 @@ The variables created by CMake include:
 
 # code-generation
 
+Code generation can be useful to create source code in different languages from a common description file. This can reduce the amount of manual code to write and increase interoperability.
+
+Examples showing code generation using variables from CMake and also using some common tools.
+
+- [configure-file](https://github.com/ttroy50/cmake-examples/blob/master/03-code-generation/configure-files) - Using the CMake configure_file function to inject CMake variables.
+- [Protocol Buffers](https://github.com/ttroy50/cmake-examples/blob/master/03-code-generation/protobuf) - Using Google Protocol Buffers to generate C++ source.
+
+Protocol Buffers
+
+```cmake
+cmake_minimum_required(VERSION 3.5)
+
+# Set the project name
+project (protobuf_example)
+
+# find the protobuf compiler and libraries
+find_package(Protobuf REQUIRED)
+
+# check if protobuf was found
+if(PROTOBUF_FOUND)
+    message ("protobuf found")
+else()
+    message (FATAL_ERROR "Cannot find Protobuf")
+endif()
+
+# Generate the .h and .cxx files
+PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS AddressBook.proto)
+
+# Print path to generated files
+message ("PROTO_SRCS = ${PROTO_SRCS}")
+message ("PROTO_HDRS = ${PROTO_HDRS}")
+
+# Add an executable
+add_executable(protobuf_example
+    main.cpp
+    ${PROTO_SRCS}
+    ${PROTO_HDRS})
+
+target_include_directories(protobuf_example
+    PUBLIC
+    ${PROTOBUF_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+# link the exe against the libraries
+target_link_libraries(protobuf_example
+    PUBLIC
+    ${PROTOBUF_LIBRARIES}
+)
+
+```
+
+configure-file
+
 # static-analysis
 
 # unit-testing
