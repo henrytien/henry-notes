@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/subbinary.dir/main.cpp.o  -o subbinary -lsub::lib1 -lsub::lib2 

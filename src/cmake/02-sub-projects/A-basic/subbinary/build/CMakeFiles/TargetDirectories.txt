@@ -1,0 +1,3 @@
+/HenryGithub/cmake-examples/02-sub-projects/A-basic/subbinary/build/CMakeFiles/rebuild_cache.dir
+/HenryGithub/cmake-examples/02-sub-projects/A-basic/subbinary/build/CMakeFiles/subbinary.dir
+/HenryGithub/cmake-examples/02-sub-projects/A-basic/subbinary/build/CMakeFiles/edit_cache.dir

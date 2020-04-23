@@ -306,6 +306,38 @@ message("List of compile features: ${CMAKE_CXX_COMPILE_FEATURES}")
 
 # sub-projects
 
+## Adding a Sub-Directory
+
+A CMakeLists.txt file can include and call sub-directories which include a CMakeLists.txt files.
+
+```
+add_subdirectory(sublibrary1)
+add_subdirectory(sublibrary2)
+add_subdirectory(subbinary)
+```
+
+## Referencing Sub-Project Directories
+
+When a project is created using the `project()` command, CMake will automatically create a number of variables which can be used to reference details about the project. These variables can then be used by other sub-projects or the main project. For exampe, to reference the source directory for a different project you can use.
+
+```
+    ${sublibrary1_SOURCE_DIR}
+    ${sublibrary2_SOURCE_DIR}
+```
+
+The variables created by CMake include:
+
+| Variable           | Info                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| PROJECT_NAME       | The name of the project set by the current `project()`.      |
+| CMAKE_PROJECT_NAME | the name of the first project set by the `project()` command, i.e. the top level project. |
+| PROJECT_SOURCE_DIR | The source director of the current project.                  |
+| PROJECT_BINARY_DIR | The build directory for the current project.                 |
+| name_SOURCE_DIR    | The source directory of the project called "name". In this example the source directories created would be `sublibrary1_SOURCE_DIR`, `sublibrary2_SOURCE_DIR`, and `subbinary_SOURCE_DIR` |
+| name_BINARY_DIR    | The binary directory of the project called "name". In this example the binary directories created would be `sublibrary1_BINARY_DIR`, `sublibrary2_BINARY_DIR`, and `subbinary_BINARY_DIR` |
+
+
+
 # code-generation
 
 # static-analysis
