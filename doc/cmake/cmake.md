@@ -286,6 +286,24 @@ else()
 endif()
 ```
 
+## Set C++ Standard
+
+### Using target_compile_features
+
+Calling the [target_compile_features](https://cmake.org/cmake/help/v3.1/command/target_compile_features.html) function on a target will look at the passed in feature and determine the correct compiler flag to use for your target.
+
+```
+target_compile_features(hello_cpp11 PUBLIC cxx_auto_type)
+```
+
+As with other `target_*` functions, you can specify the scope of the feature for the selected target. This populates the [INTERFACE_COMPILE_FEATURES](https://cmake.org/cmake/help/v3.1/prop_tgt/INTERFACE_COMPILE_FEATURES.html#prop_tgt:INTERFACE_COMPILE_FEATURES) property for the target.
+
+The list of available features can be found from the [CMAKE_CXX_COMPILE_FEATURES](https://cmake.org/cmake/help/v3.1/variable/CMAKE_CXX_COMPILE_FEATURES.html#variable:CMAKE_CXX_COMPILE_FEATURES) variable. You can obtain a list of the available features using the following code:
+
+```
+message("List of compile features: ${CMAKE_CXX_COMPILE_FEATURES}")
+```
+
 # sub-projects
 
 # code-generation
