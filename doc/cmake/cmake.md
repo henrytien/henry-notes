@@ -1,27 +1,39 @@
-# [CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html#id1)
+# CMake Tutorial
 
 <!-- TOC -->
 
-- [[CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html#id1)](#cmake-tutorialhttpscmakeorgcmakehelplatestguidetutorialindexhtmlid1)
+- [CMake Tutorial](#cmake-tutorial)
 - [Cmake](#cmake)
-    - [[Introduction](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id8)](#introductionhttpscmakeorgcmakehelplatestmanualcmake-toolchains7htmlid8)
-    - [[Languages](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id9)](#languageshttpscmakeorgcmakehelplatestmanualcmake-toolchains7htmlid9)
-    - [[Variables and Properties](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id10)](#variables-and-propertieshttpscmakeorgcmakehelplatestmanualcmake-toolchains7htmlid10)
-    - [[Toolchain Features](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id11)](#toolchain-featureshttpscmakeorgcmakehelplatestmanualcmake-toolchains7htmlid11)
-    - [[Cross Compiling](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id12)](#cross-compilinghttpscmakeorgcmakehelplatestmanualcmake-toolchains7htmlid12)
+  - [Introduction](#introduction)
+  - [Languages](#languages)
+  - [Variables and Properties](#variables-and-properties)
+  - [Cross Compiling](#cross-compiling)
 - [Basic](#basic)
-    - [[hello-cmake](https://github.com/ttroy50/cmake-examples/blob/master/01-basic/A-hello-cmake)](#hello-cmakehttpsgithubcomttroy50cmake-examplesblobmaster01-basica-hello-cmake)
-        - [Introduction](#introduction)
-        - [Concepts](#concepts)
-        - [CMakeLists.txt](#cmakeliststxt)
-    - [Installing](#installing)
-    - [Build Type](#build-type)
-        - [Set Default Build Type](#set-default-build-type)
-    - [Compile Flags](#compile-flags)
-        - [Set Per-Target C++ Flags](#set-per-target-c-flags)
+  - [hello-cmake](#hello-cmake)
+    - [Introduction](#introduction-1)
+    - [Concepts](#concepts)
+    - [CMakeLists.txt](#cmakeliststxt)
+  - [Installing](#installing)
+  - [Build Type](#build-type)
+    - [Set Default Build Type](#set-default-build-type)
+  - [Compile Flags](#compile-flags)
+    - [Set Per-Target C++ Flags](#set-per-target-c-flags)
+  - [Building with ninja](#building-with-ninja)
+    - [Calling a Generator](#calling-a-generator)
+  - [Imported Targets](#imported-targets)
+  - [C++ Standard Common Method](#c-standard-common-method)
+    - [Checking Compile flags](#checking-compile-flags)
+    - [Adding the flag](#adding-the-flag)
+  - [Set C++ Standard](#set-c-standard)
+    - [Using target_compile_features](#using-targetcompilefeatures)
 - [sub-projects](#sub-projects)
+  - [Adding a Sub-Directory](#adding-a-sub-directory)
+  - [Referencing Sub-Project Directories](#referencing-sub-project-directories)
 - [code-generation](#code-generation)
+    - [Protocol Buffers](#protocol-buffers)
 - [static-analysis](#static-analysis)
+    - [CppCheck Static Analysis](#cppcheck-static-analysis)
+    - [scan-build](#scan-build)
 - [unit-testing](#unit-testing)
 - [installer](#installer)
 - [package-management](#package-management)
@@ -32,7 +44,7 @@
 
 Recently, I've created a [simple library](https://github.com/marker68/simple-k-means) in C++. I want to use CMake as the building system so it’s the time to learn a new tool.
 
-## [Introduction](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id8)
+## Introduction
 
 CMake is a tool to manage building of source code. Originally, CMake was designed as a generator for various dialects of `Makefile`, today CMake generates modern buildsystems such as `Ninja` as well as project files for IDEs such as Visual Studio and Xcode.
 
@@ -46,23 +58,21 @@ For developers starting a project using CMake, the [`CMake Tutorial`](https://cm
 
 
 
-## [Languages](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id9)
+## Languages
 
 Languages are enabled by the [`project()`](https://cmake.org/cmake/help/latest/command/project.html#command:project) command.
 
-## [Variables and Properties](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id10)
+## Variables and Properties
 
 Several variables relate to the language components of a toolchain which are enabled.
 
-## [Toolchain Features](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id11)
-
-## [Cross Compiling](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id12)
+## Cross Compiling
 
 If [`cmake(1)`](https://cmake.org/cmake/help/latest/manual/cmake.1.html#manual:cmake(1)) is invoked with the command line parameter `-DCMAKE_TOOLCHAIN_FILE=path/to/file`, the file will be loaded early to set values for the compilers. 
 
 # Basic
 
-## [hello-cmake](https://github.com/ttroy50/cmake-examples/blob/master/01-basic/A-hello-cmake)
+## hello-cmake
 
 ```cmake
 # Set the minimum version of CMake that can be used
@@ -347,7 +357,7 @@ Examples showing code generation using variables from CMake and also using some 
 - [configure-file](https://github.com/ttroy50/cmake-examples/blob/master/03-code-generation/configure-files) - Using the CMake configure_file function to inject CMake variables.
 - [Protocol Buffers](https://github.com/ttroy50/cmake-examples/blob/master/03-code-generation/protobuf) - Using Google Protocol Buffers to generate C++ source.
 
-Protocol Buffers
+### Protocol Buffers
 
 ```cmake
 cmake_minimum_required(VERSION 3.5)
@@ -395,6 +405,12 @@ target_link_libraries(protobuf_example
 configure-file
 
 # static-analysis
+
+The examples here include using the following tools:
+
+- [CppCheck](http://cppcheck.sourceforge.net/)
+- [Clang Static Analyzer](https://clang-analyzer.llvm.org/)
+- [Clang Format](https://clang.llvm.org/docs/ClangFormat.html) 
 
 Static analysis is the analysis of code without executing it. It can be
 used to find common programming errors and enforce coding guidelines.
