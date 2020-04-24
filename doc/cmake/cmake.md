@@ -396,7 +396,70 @@ configure-file
 
 # static-analysis
 
+Static analysis is the analysis of code without executing it. It can be
+used to find common programming errors and enforce coding guidelines.
+Examples of errors that can be found using static analysis tools
+include:
+
+* Out of bounds errors
+* Memory leaks
+* Usage of uninitialized variables
+* Use of unsafe functions
+
+### CppCheck Static Analysis
+
+* Introduction
+
+  This example shows how to call the
+  http://cppcheck.sourceforge.net/[CppCheck] tool to do static analysis.
+  This shows how to make an analysis target for each project in your repository.
+
+  ```
+  $ tree
+  .
+  ├── cmake
+  │   ├── analysis.cmake
+  │   └── modules
+  │       └── FindCppCheck.cmake
+  ├── CMakeLists.txt
+  ├── subproject1
+  │   ├── CMakeLists.txt
+  │   └── main1.cpp
+  └── subproject2
+      ├── CMakeLists.txt
+      └── main2.cpp
+  ```
+
+### scan-build
+
+To run clang static analyzer you can use the tool `scan-build` to run the analyzer when you also run the compiler. This overrides the CC and CXX environment variables and replaces them with it’s own tools. To run it you can do
+
+```
+$ scan-build-3.6 cmake ..
+$ scan-build-3.6 make
+```
+
+By default this will run the standard compiler for your platform, i.e. `gcc` on linux. However, if you want to override this you can change the command to:
+
+```
+$ scan-build-3.6 --use-cc=clang-3.6 --use-c++=clang++-3.6 -o ./scanbuildout/ make
+```
+
 # unit-testing
+
+Unit testing is a software development process in which the smallest testable parts of an application, called units, are individually and independently scrutinized for proper operation. This can involve taking a class, function, or algorithm and writing test cases that can be run to verify that the unit is working correctly.
+
+CMake includes a tool called [CTest](https://cmake.org/Wiki/CMake/Testing_With_CTest) which allows you to enable the `make test` target to run automated tests such as unit tests.
+
+There are many unit-testing frameworks available which can be used to help automate and ease the development of unit tests. In these examples I show how to use some of these frameworks and call them using the CMake testing utility CTest.
+
+The examples here include using the following frameworks:
+
+- [Boost Unit Test Framework](http://www.boost.org/doc/libs/1_56_0/libs/test/doc/html/utf/user-guide.html)
+- [Google Test - Download](https://github.com/google/googletest)
+- [Catch2](https://github.com/catchorg/Catch2) 
+
+
 
 # installer
 
