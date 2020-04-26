@@ -13,6 +13,13 @@
 Adding new concrete types is done by modifying the client code to use a different factory, a modification that is typically one line in one file. The different factory then creates objects of a different concrete type, but still returns a pointer of the same abstract type as before — thus insulating the client code from change. This is significantly easier than modifying the client code to instantiate a new type, which would require changing every location in the code where a new object is created (as well as making sure that all such code locations also have knowledge of the new concrete type, by including for instance a concrete class header file). If all factory objects are stored globally in a singleton object, and all client code goes through the singleton to access the proper factory for object creation, then changing factories is as easy as changing the singleton object.[7]
 
 
+# Structural
+## Adapter pattern
+
+In software engineering, the adapter pattern is a software design pattern (also known as wrapper, an alternative naming shared with the decorator pattern) that allows the interface of an existing class to be used as another interface.[1] It is often used to make existing classes work with others without modifying their source code.
+
+### Definition
+An adapter allows two incompatible interfaces to work together. This is the real-world definition for an adapter. Interfaces may be incompatible, but the inner functionality should suit the need. The adapter design pattern allows otherwise incompatible classes to work together by converting the interface of one class into an interface expected by the clients.
 
 
 
@@ -20,4 +27,4 @@ Adding new concrete types is done by modifying the client code to use a differen
 
 - [C++ Design Patterns](https://github.com/JakubVojvoda/design-patterns-cpp)
 - [Wikipedia](https://en.wikipedia.org/wiki/Design_Patterns)
-- 
+- [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
