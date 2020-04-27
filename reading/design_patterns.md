@@ -12,6 +12,15 @@
 > The client code has no knowledge whatsoever of the concrete type, not needing to include any header files or class declarations related to it. The client code deals only with the abstract type. Objects of a concrete type are indeed created by the factory, but the client code accesses such objects only through their abstract interface.[7]
 Adding new concrete types is done by modifying the client code to use a different factory, a modification that is typically one line in one file. The different factory then creates objects of a different concrete type, but still returns a pointer of the same abstract type as before — thus insulating the client code from change. This is significantly easier than modifying the client code to instantiate a new type, which would require changing every location in the code where a new object is created (as well as making sure that all such code locations also have knowledge of the new concrete type, by including for instance a concrete class header file). If all factory objects are stored globally in a singleton object, and all client code goes through the singleton to access the proper factory for object creation, then changing factories is as easy as changing the singleton object.[7]
 
+##  Builder
+
+### Applicability
+Use the Builder pattern when
+- the algorithm for creating a complex object should be independent of the parts that make up the object and how they're assembled.
+- the construction process must allow different representations for the object that's constructed.
+
+
+
 
 # Structural
 ## Adapter pattern
@@ -21,6 +30,12 @@ In software engineering, the adapter pattern is a software design pattern (also 
 ### Definition
 An adapter allows two incompatible interfaces to work together. This is the real-world definition for an adapter. Interfaces may be incompatible, but the inner functionality should suit the need. The adapter design pattern allows otherwise incompatible classes to work together by converting the interface of one class into an interface expected by the clients.
 
+
+## Applicability
+Use the Adapter pattern when
+- you want to use an existing class, and its interface does not match the one you need.
+-  youwanttocreateareusableclassthatcooperateswithunrelatedorunfore- seen classes, that is, classes that don't necessarily have compatible interfaces.
+- (object adapter only) you need to use several existing subclasses, but it's un- practical to adapt their interface by subclassing every one. An object adapter can adapt the interface of its parent class.
 
 
 # Reference
