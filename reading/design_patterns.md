@@ -1,4 +1,26 @@
+<!-- TOC -->
 
+- [Design Patterns](#design-patterns)
+- [Creational pattern](#creational-pattern)
+  - [Abstract factory](#abstract-factory)
+    - [Usage](#usage)
+  - [Builder](#builder)
+    - [Applicability](#applicability)
+  - [Factory Method](#factory-method)
+    - [Applicability](#applicability-1)
+    - [When to use](#when-to-use)
+  - [Prototype](#prototype)
+    - [Applicability](#applicability-2)
+  - [Singleton](#singleton)
+    - [Applicability](#applicability-3)
+    - [HeadFirst](#headfirst)
+- [Structural](#structural)
+  - [Adapter pattern](#adapter-pattern)
+    - [Definition](#definition)
+    - [Applicability](#applicability-4)
+- [Reference](#reference)
+
+<!-- /TOC -->
 # Design Patterns
 
 > In software engineering, a software design pattern is a general, reusable solution to a commonly occurring problem within a given context in software design. It is not a finished design that can be transformed directly into source or machine code. Rather, it is a description or template for how to solve a problem that can be used in many different situations. Design patterns are formalized best practices that the programmer can use to solve common problems when designing an application or system.
@@ -22,13 +44,13 @@ Use the Builder pattern when
 ## Factory Method
 Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
 
-## Applicability
+### Applicability
 Use the Factory Method pattern when
 • aclasscan'tanticipatetheclassofobjectsitmustcreate.
 • aclasswantsitssubclassestospecifytheobjectsitcreates.
 • classes delegate responsibility to one of several helper subclasses, and you want to localize the knowledge of which helper subclass is the delegate.
 
-## When to use
+### When to use
 
 * a class cant anticipate the class of objects it must create
 * a class wants its subclasses to specify the objects it creates
@@ -41,13 +63,37 @@ Specify the kinds of objects to create using a prototypical instance, and create
 new objects by copying this prototype. when the classes to instantiate are 
 specified at run-time, for example, by dynamic loading;
 
-## Applicability
+### Applicability
 
 • when the classes to instantiate are specified at run-time, for example, by dynamic loading; or
 • toavoidbuildingaclasshierarchyoffactoriesthatparallelstheclasshierar- chy of products; or
 • when instances of a class can have one of only a few different combinations of state. It may be more convenient to install a corresponding number of prototypes and clone them rather than instantiating the class manually, each time with the appropriate state.
 
+## Singleton
+Ensure a class only has one instance, and provide a global point of access to it.
+### Applicability
+• there must be exactly one instance of a class, and it must be accessible to clients from a well-known access point.
+• when the sole instance should be extensible by subclassing, and clients should be able to use an extended instance without modifying their code.
 
+
+• Singleton
+- defines an Instance operation that lets clients access its unique instance. Instance is a class operation (that is, a class method in Smalltalk and a static member function in C++).
+- may be responsible for creating its own unique instance.
+
+More flexible than class operations. Another way to package a singleton's func- tionality is to use class operations (that is, static member functions in C++ or class methods in Smalltalk). But both of these language techniques make it hard to change a design to allow more than one instance of a class. Moreover, static member functions in C++ are never virtual, so subclasses can't override them polymorphically.
+
+### HeadFirst
+Well, here’s one example: if you assign an object to a global variable, then that object might be created when your application begins. Right? What if this object is resource intensive and your application never ends up using it? As you will see, with the Singleton Pattern, we can create our objects only when they are needed. p170
+
+Singleton: Oh, I’m good for all kinds of things. Being single sometimes has its advantages you
+know. I’m often used to manage pools of resources, like connection or thread pools.
+
+Singleton: Of course not. The truth be told... well, this is getting kind of personal but... I have no public constructor.
+
+So my class has a static method called getInstance(). 
+
+The Singleton Pattern ensures a class has only one instance, and provides a global point of access to it.
+ 
 # Structural
 ## Adapter pattern
 
@@ -57,7 +103,7 @@ In software engineering, the adapter pattern is a software design pattern (also 
 An adapter allows two incompatible interfaces to work together. This is the real-world definition for an adapter. Interfaces may be incompatible, but the inner functionality should suit the need. The adapter design pattern allows otherwise incompatible classes to work together by converting the interface of one class into an interface expected by the clients.
 
 
-## Applicability
+### Applicability
 Use the Adapter pattern when
 - you want to use an existing class, and its interface does not match the one you need.
 -  youwanttocreateareusableclassthatcooperateswithunrelatedorunfore- seen classes, that is, classes that don't necessarily have compatible interfaces.
