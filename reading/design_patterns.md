@@ -20,6 +20,9 @@
     - [Applicability](#applicability-4)
   - [Decorator](#decorator)
     - [Applicability](#applicability-5)
+- [Behavioral Patterns](#behavioral-patterns)
+  - [Obeserver](#obeserver)
+    - [Applicability](#applicability-6)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -123,6 +126,19 @@ The Decorator pattern has at least two key benefits and two liabilities:
 • to add responsibilities to individual objects dynamically and transparently, that is, without affecting other objects.
 • for responsibilities that canbe withdrawn.
 • when extension by subclassing is impractical. Sometimes a large number of independent extensions are possible and would produce an explosion of subclasses to support every combination. Or a class definition maybe hidden or otherwise unavailable for subclassing.
+
+# Behavioral Patterns
+Behavioral patterns are concerned with algorithms and the assignment of responsibili- ties between objects. Behavioral patterns describe not just patterns of objects or classes but also the patterns of communication between them.
+
+## Obeserver 
+Define a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically. like Dependents, Publish-Subscribe.
+
+### Applicability
+Use the Observer pattern in any of the following situations:
+• When an abstraction has two aspects, one dependent on the other. Encapsu- lating these aspects in separate objects lets you vary and reuse them inde- pendently.
+• When a change to one object requires changing others, and you don't know how many objects need to be changed.
+• When an object should be able to notify other objects without making as- sumptions about who these objects are. In other words, you don't want these objects tightly coupled.
+
 
 
 # Reference
