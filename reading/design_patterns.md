@@ -18,6 +18,8 @@
   - [Adapter pattern](#adapter-pattern)
     - [Definition](#definition)
     - [Applicability](#applicability-4)
+  - [Decorator](#decorator)
+    - [Applicability](#applicability-5)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -71,6 +73,8 @@ specified at run-time, for example, by dynamic loading;
 
 ## Singleton
 Ensure a class only has one instance, and provide a global point of access to it.
+
+A better solution is to make the class itself responsible for keeping track of its sole instance. The class can ensure that no other instance can be created (by intercepting requests to create new objects), and it can provide a way to access the instance. This is the Singleton pattern.
 ### Applicability
 • there must be exactly one instance of a class, and it must be accessible to clients from a well-known access point.
 • when the sole instance should be extensible by subclassing, and clients should be able to use an extended instance without modifying their code.
@@ -108,6 +112,17 @@ Use the Adapter pattern when
 - you want to use an existing class, and its interface does not match the one you need.
 -  youwanttocreateareusableclassthatcooperateswithunrelatedorunfore- seen classes, that is, classes that don't necessarily have compatible interfaces.
 - (object adapter only) you need to use several existing subclasses, but it's un- practical to adapt their interface by subclassing every one. An object adapter can adapt the interface of its parent class.
+
+
+## Decorator
+Attach additional responsiblities to an object dynamiclly. Decorators provide a flexiable alternative to subclassing for extending functionality. 
+
+The Decorator pattern has at least two key benefits and two liabilities:
+
+### Applicability
+• to add responsibilities to individual objects dynamically and transparently, that is, without affecting other objects.
+• for responsibilities that canbe withdrawn.
+• when extension by subclassing is impractical. Sometimes a large number of independent extensions are possible and would produce an explosion of subclasses to support every combination. Or a class definition maybe hidden or otherwise unavailable for subclassing.
 
 
 # Reference
