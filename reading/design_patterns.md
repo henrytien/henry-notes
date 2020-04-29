@@ -20,9 +20,12 @@
     - [Applicability](#applicability-4)
   - [Decorator](#decorator)
     - [Applicability](#applicability-5)
+  - [Bridge](#bridge)
+    - [Applicability](#applicability-6)
+    - [Consequences](#consequences)
 - [Behavioral Patterns](#behavioral-patterns)
   - [Obeserver](#obeserver)
-    - [Applicability](#applicability-6)
+    - [Applicability](#applicability-7)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -126,6 +129,24 @@ The Decorator pattern has at least two key benefits and two liabilities:
 • to add responsibilities to individual objects dynamically and transparently, that is, without affecting other objects.
 • for responsibilities that canbe withdrawn.
 • when extension by subclassing is impractical. Sometimes a large number of independent extensions are possible and would produce an explosion of subclasses to support every combination. Or a class definition maybe hidden or otherwise unavailable for subclassing.
+
+## Bridge
+Decouple an abstraction from its implementation so that the two can vary inde-pendently.
+
+### Applicability
+Use the Bridge pattern when
+- when the implementation must be selected or switched at run-time.
+
+- the Bridge pattern lets you combine the different abstractions and implementations and extend them independently.
+
+- changes in the implementation of an abstraction should have no impact on clients; that is, their code should not have to be recompiled.
+
+- you want to share an implementation among multiple objects(perhaps using reference counting)
+### Consequences
+1. Decoupling interface and implementation. 
+2. Improved extensibility. 
+3. Hiding implementation details from clients.
+
 
 # Behavioral Patterns
 Behavioral patterns are concerned with algorithms and the assignment of responsibili- ties between objects. Behavioral patterns describe not just patterns of objects or classes but also the patterns of communication between them.
