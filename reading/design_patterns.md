@@ -74,7 +74,7 @@ specified at run-time, for example, by dynamic loading;
 ### Applicability
 
 • when the classes to instantiate are specified at run-time, for example, by dynamic loading; or
-• toavoidbuildingaclasshierarchyoffactoriesthatparallelstheclasshierar- chy of products; or
+• to avoid building a class hierarchy off actories that parallels the class hierarchy of products; or
 • when instances of a class can have one of only a few different combinations of state. It may be more convenient to install a corresponding number of prototypes and clone them rather than instantiating the class manually, each time with the appropriate state.
 
 ## Singleton
