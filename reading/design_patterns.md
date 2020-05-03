@@ -23,9 +23,12 @@
   - [Bridge](#bridge)
     - [Applicability](#applicability-6)
     - [Consequences](#consequences)
+  - [Composite](#composite)
+    - [Applicability](#applicability-7)
+    - [Consequences](#consequences-1)
 - [Behavioral Patterns](#behavioral-patterns)
   - [Obeserver](#obeserver)
-    - [Applicability](#applicability-7)
+    - [Applicability](#applicability-8)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -146,6 +149,19 @@ Use the Bridge pattern when
 1. Decoupling interface and implementation. 
 2. Improved extensibility. 
 3. Hiding implementation details from clients.
+
+## Composite
+Compose objects into tree structures to represent part-whole hierarchies. Com- posite lets clients treat individual objects and compositions of objects uniformly.
+
+### Applicability
+Use the Composite pattern when
+• you want to represent part-whole hierarchies ofobjects.
+• youwantclientstobeabletoignorethedifferencebetweencompositionsof objects and individual objects. Clients will treat all objects in the composite structure uniformly.
+
+### Consequences
+1. Defines class hierarchies consisting of primitive objects and composite ob- jects. 
+2. Makes it easier to add new kinds of components. 
+3. Can make your design overly general.
 
 
 # Behavioral Patterns
