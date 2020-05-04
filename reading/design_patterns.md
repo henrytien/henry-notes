@@ -31,9 +31,14 @@
     - [Applicability](#applicability-8)
     - [Consequences](#consequences-2)
     - [Related Patterns](#related-patterns)
+  - [Proxy](#proxy)
+    - [Intent](#intent-1)
+    - [Applicability](#applicability-9)
+    - [Consequences](#consequences-3)
+    - [Relate Pattrns](#relate-pattrns)
 - [Behavioral Patterns](#behavioral-patterns)
   - [Obeserver](#obeserver)
-    - [Applicability](#applicability-9)
+    - [Applicability](#applicability-10)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -187,6 +192,26 @@ The Facade pattern offers the following benefits:
 1. Abstract Factory can also be used as an alternative to Facade to hide platform-specific classes.
 2. Mediator's purpose is to abstract arbitrary communication be- tween colleague objects.
 3. Thus Facade objects are often singletons.
+
+## Proxy
+
+### Intent
+Provide a surrogate or placeholder for another object to control access to it.
+
+### Applicability
+1. A remote proxy provides a local representative for an object in a different address space.
+2. A virtual proxy creates expensive objects on demand.
+3. A protection proxy controls access to the original object. Protection proxies are useful when objects should have different access rights. 
+4. A smart reference is a replacement for a bare pointer that performs addtional actions when an object is accessed.
+
+### Consequences
+1. The proxy behaves just like a pointer.
+2. Overloading the member access operator isn't a good solution for every kind of proxy.
+3. A server creates proxies for remote objects when clients request them. On receiving a message, the proxy encodes it along with its arguments and then forwards the encoded message to the remote subject. 
+
+### Relate Pattrns
+1. Adapter: a proxy provides the same interface as its subject, In contrast, an adapter provides a different interface to the object it adates.
+2. Decorator: a decorator adds one or more responsi- bilities to an object, whereas a proxy controls access to an object.
 
 
 # Behavioral Patterns
