@@ -39,6 +39,10 @@
 - [Behavioral Patterns](#behavioral-patterns)
   - [Obeserver](#obeserver)
     - [Applicability](#applicability-10)
+  - [Strategy](#strategy)
+    - [Intent](#intent-2)
+    - [Applicability](#applicability-11)
+    - [Consquences](#consquences)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -225,6 +229,25 @@ Use the Observer pattern in any of the following situations:
 • When an abstraction has two aspects, one dependent on the other. Encapsu- lating these aspects in separate objects lets you vary and reuse them inde- pendently.
 • When a change to one object requires changing others, and you don't know how many objects need to be changed.
 • When an object should be able to notify other objects without making as- sumptions about who these objects are. In other words, you don't want these objects tightly coupled.
+
+## Strategy
+### Intent
+Define a family of algorithms, encapsulate each one, and make them interchange- able. Strategy lets the algorithm vary independently from clients that use it.
+
+### Applicability
+- many related classes differ only in their behavior.
+- you need different variants of an algorithm.
+
+### Consquences
+1. Families of related algorithms.
+2. An alternative to subclassing.
+3. Strategies eliminate conditional statements.
+4. The pattern has a potential draw- back in that a client must understand how Strategies differ before it can select the appropriate one. 
+5. A choice of implementations. 
+6. Increased number of objects. 
+7. Communication overhead between Strategy and Context. 
+
+
 
 
 
