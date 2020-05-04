@@ -26,9 +26,14 @@
   - [Composite](#composite)
     - [Applicability](#applicability-7)
     - [Consequences](#consequences-1)
+  - [FACADE](#facade)
+    - [Intent](#intent)
+    - [Applicability](#applicability-8)
+    - [Consequences](#consequences-2)
+    - [Related Patterns](#related-patterns)
 - [Behavioral Patterns](#behavioral-patterns)
   - [Obeserver](#obeserver)
-    - [Applicability](#applicability-8)
+    - [Applicability](#applicability-9)
 - [Reference](#reference)
 
 <!-- /TOC -->
@@ -162,6 +167,26 @@ Use the Composite pattern when
 1. Defines class hierarchies consisting of primitive objects and composite ob- jects. 
 2. Makes it easier to add new kinds of components. 
 3. Can make your design overly general.
+
+## FACADE
+### Intent
+Provide a unified interface to a set of interfaces in a subsystem. Facade defines a higher-level interface that makes the subsystem easier to use.
+
+### Applicability
+Use the Facade pattern when
+- You want to provide a simple interface to a complex subsystem.
+- You want to layer your subsystems.
+  
+### Consequences
+The Facade pattern offers the following benefits:
+1. It shields clients from subsystem components, thereby reducing the number of objects that clients deal with and making the subsystem easier to use. 
+2. It promotes week compuling between the subsystem and its clients.
+3. Reducing complition dependencies is vital in large software systems.
+  
+### Related Patterns
+1. Abstract Factory can also be used as an alternative to Facade to hide platform-specific classes.
+2. Mediator's purpose is to abstract arbitrary communication be- tween colleague objects.
+3. Thus Facade objects are often singletons.
 
 
 # Behavioral Patterns
