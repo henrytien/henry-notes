@@ -1,7 +1,8 @@
 
 <!-- TOC -->
 
-- [简单动态字符串](#%e7%ae%80%e5%8d%95%e5%8a%a8%e6%80%81%e5%ad%97%e7%ac%a6%e4%b8%b2)
+- [数据结构](#%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84)
+  - [简单动态字符串](#%e7%ae%80%e5%8d%95%e5%8a%a8%e6%80%81%e5%ad%97%e7%ac%a6%e4%b8%b2)
   - [链表](#%e9%93%be%e8%a1%a8)
   - [字典](#%e5%ad%97%e5%85%b8)
     - [Hash table](#hash-table)
@@ -18,7 +19,7 @@
     - [Summary](#summary)
   - [Ziplist](#ziplist)
     - [Summary](#summary-1)
-  - [Redis object implementation](#redis-object-implementation)
+- [Redis object implementation](#redis-object-implementation)
     - [Embstr](#embstr)
     - [Raw](#raw)
     - [Redis list](#redis-list)
@@ -55,8 +56,8 @@
   - [Sentinel](#sentinel)
 
 <!-- /TOC -->
-
-# 简单动态字符串    
+# 数据结构
+##  简单动态字符串    
 
 ![](./img/cstring_vs_sds.png)
 
@@ -284,7 +285,7 @@ OK
 - 压缩列表可以包含多个节点，每个节点可以保存一个字节数组或者整数值。
 - 添加新节点到压缩列表， 或者从压缩列表中删除节点， 可能会引发连锁更新操作， 但这种操作出现的几率并不高
 
-## Redis object implementation 
+# Redis object implementation 
 
 Some kind of objects like Strings and Hashes can be  internally represented in multiple ways. The 'encoding' field of the object is set to one of this fields for this object. 
 
