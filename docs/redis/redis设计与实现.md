@@ -740,26 +740,16 @@ has many fields, here we'll just show the main ones: [client](https://github.com
 
 ```c
 struct client {
-
-​        int fd;
-
-​        sds querybuf;
-
-​        int argc;
-
-​        robj **argv;
-
-​        redisDb *db;
-
-​        int flags;
-
-​        list *reply;
-
-​        char buf[PROTO_REPLY_CHUNK_BYTES];
-
-​        ... many other fields ...
-
-​    }
+  int fd;
+  sds querybuf;
+  int argc;
+  robj **argv;
+	redisDb *db;
+  int flags;
+	list *reply;
+	char buf[PROTO_REPLY_CHUNK_BYTES];
+	... many other fields ...
+}
 ```
 
 The client structure defines a **connected client**:
