@@ -176,8 +176,6 @@ hash factor, `load_factor = ht[0].used / ht[0].size`.
 
 Hash function is [MurmurHash2](https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.cpp), It was created by Austin Appleby in 2008[[2\]](https://en.wikipedia.org/wiki/MurmurHash#cite_note-2) and is currently hosted on GitHub along with its test suite named 'SMHasher'.
 
-Redis conclude
-
 ## Skiplist
 
  This skiplist implementation is almost a C translation of the original
@@ -186,15 +184,11 @@ Redis conclude
 
   Alternative to Balanced Trees", modified in three ways:
 
-      a) this implementation allows for repeated scores.
+​	a) this implementation allows for repeated scores.
+​	b) the comparison is not just by key (our 'score') but by satellite data.
+​	c) there is a back pointer, so it's a doubly linked list with the back pointers being only at "level 1". 
 
-​      b) the comparison is not just by key (our 'score') but by satellite data.
-
-      c) there is a back pointer, so it's a doubly linked list with the back
-
-   pointers being only at "level 1". This allows to traverse the list
-
-  from tail to head, useful for ZREVRANGE. 
+This allows to traverse the list from tail to head, useful for ZREVRANGE. 
 
 Here are have a paper about skiplist,[Skip Lists: A Probabilistic Alternative to Balanced Trees](ftp://ftp.cs.umd.edu/pub/skipLists/skiplists.pdf)
 
