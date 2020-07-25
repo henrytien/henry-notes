@@ -8,7 +8,7 @@ public:
     ~IntVec(){
         log("Deconstructor");
         if(m_data){
-            delete [] m_data;
+            delete[] m_data;
             m_data = 0;
         }
     }
@@ -21,7 +21,7 @@ public:
         }
     }
     
-    IntVec& operator = (const IntVec &other) {
+    IntVec& operator= (const IntVec &other) {
         log("Copy assigment operator");
         IntVec tmp(other);
         std::swap(m_size, tmp.m_size);
@@ -29,6 +29,12 @@ public:
         return *this;
     }
     
+    IntVec& operator= (IntVec &&other) {
+        log("Move assigment operator");
+        std::swap(m_size, other.m_size);
+        std::swap(m_data, other.m_data);
+        return *this;
+    }
     
     
 private:
@@ -46,5 +52,11 @@ int main(){
     cout << "Assiging lvalue...\n";
     v2 = v1;
     cout << "Ending assigment lvalue...\n";
+    cout << endl;
+    
+    cout << "Assiging rvalue...\n";
+    v2 = IntVec(33);
+    cout << "Ending assigment rvalue...\n";
+
     return 0;
 }
