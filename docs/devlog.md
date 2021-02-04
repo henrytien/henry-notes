@@ -1,4 +1,27 @@
 
+
+## 2021-2-3
+[虚拟机启动后黑屏并无法关闭]()
+[CentOS7安装VMware Tools](https://blog.csdn.net/zhujing16/article/details/88677253)
+[CentOS使用Samba共享文件](https://www.cnblogs.com/lxx-coder/archive/2020/07/19/13339252.html)
+Samba 语法：
+```
+// 添加 Samba 用户帐号
+
+# smbpasswd -a sambauser
+
+// 禁用 Samba 用户帐号
+
+# smbpasswd -d sambauser
+
+// 启用 Samba 用户帐号
+
+# smbpasswd -e sambauser
+
+// 删除 Samba 用户帐号
+
+# smbpasswd -x sambauser
+```
 2019年2月28日
 
 ## gdb
@@ -68,18 +91,3 @@ b) 线程数量基本只受限于内存.
 [用户态调度要保存些什么](http://woofy.cn/2017/07/07/user_level_schedule/)
 
 ---
-
--Wold-style-cast   
-Diagnostic text:
-
-warning: use of old-style cast
-
--Wdisabled-macro-expansion  
-Diagnostic text:
-
-warning: disabled expansion of recursive macro
-
-> push & pop are used to save and restore the compiler state, similar to Core Graphics or OpenGL contexts.
-
--Wunknown-pragmas  
-Some of the diagnostics controlled by this flag are enabled by default.
